@@ -2,14 +2,29 @@
 set -ex
 
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-Rscript Fig1_map.R "$@"
+Rscript Fig2d.R "$@"
 
 # The previous version of this file was commented-out and follows below:
 #
-# Rscript 04.analyze_RHW_AHW_trend.R "$@"
+# Rscript Fig2c.R "$@"
 # 
 # # The previous version of this file was commented-out and follows below:
 # #
-# # Rscript 00.run_first.R "$@"
+# # Rscript Fig2.a.CE_map.R "$@"
+# # 
+# # # The previous version of this file was commented-out and follows below:
+# # #
+# # # Rscript Fig2.a.US_map.R "$@"
+# # # 
+# # # # The previous version of this file was commented-out and follows below:
+# # # #
+# # # # Rscript Fig2.a.US_map.R "$@"
+# # # # 
+# # # # # The previous version of this file was commented-out and follows below:
+# # # # #
+# # # # # Rscript Fig1_CE_map.R "$@"
+# # # # # 
+# # # # 
+# # # 
 # # 
 # 
