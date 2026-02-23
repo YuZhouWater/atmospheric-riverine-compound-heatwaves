@@ -5,12 +5,6 @@ library(sf)
 sf::sf_use_s2(FALSE)
 library(tmap)
 
-dir.create("tmp", showWarnings = FALSE, recursive = TRUE)
-tempdir <- function() normalizePath("tmp")
-unlockBinding("tempdir", baseenv())
-utils::assignInNamespace("tempdir", tempdir, ns = "base", envir = baseenv())
-assign("tempdir", tempdir, baseenv())
-lockBinding("tempdir", baseenv())
 dir.create("results/Fig1", recursive = TRUE, showWarnings = FALSE)
 basemap_dir <- "/data/LamaH/basemap"
 results_dir <- "/results/Fig1"
@@ -213,9 +207,9 @@ map_inten_CE <- make_ce_map(
   title_col = "Mean\nintensity"
 )
 
-tmap_save(map_freq_CE,  file.path(results_dir, "CE_RHW_frequency.png"),  dpi = 600, width = 8, height = 5, units = "in")
-tmap_save(map_dur_CE,   file.path(results_dir, "CE_RHW_duration.png"),   dpi = 600, width = 8, height = 5, units = "in")
-tmap_save(map_inten_CE, file.path(results_dir, "CE_RHW_intensity.png"),  dpi = 600, width = 8, height = 5, units = "in")
+tmap_save(map_freq_CE,  file.path(results_dir, "Fig1_CE_RHW_frequency.png"),  dpi = 600, width = 8, height = 5, units = "in")
+tmap_save(map_dur_CE,   file.path(results_dir, "Fig1_CE_RHW_duration.png"),   dpi = 600, width = 8, height = 5, units = "in")
+tmap_save(map_inten_CE, file.path(results_dir, "Fig1_CE_RHW_intensity.png"),  dpi = 600, width = 8, height = 5, units = "in")
 
 
 cat("Saved:\n",

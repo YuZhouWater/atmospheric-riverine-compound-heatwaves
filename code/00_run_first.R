@@ -1,25 +1,32 @@
 # ============================================================
 # 00_run_first.R
-# Stable entry point for ARCH workflow (Code Ocean safe)
+# ============================================================
+# Recommended execution entry for peer review.
+#
+# This script orchestrates the full analysis pipeline in a
+# deterministic and reproducible manner. All required intermediate
+# datasets are precomputed and provided under `data/` to ensure
+# efficient runtime during peer evaluation.
+#
+# The script:
+#   - establishes a clean execution context,
+#   - creates a dedicated results directory for this run,
+#   - executes analysis and figure scripts in a fixed order,
+#   - avoids cross-script environment side effects.
+#
+# Running this file is sufficient to regenerate Figures 1, 2,
+# and 6 as presented in the manuscript.
 # ============================================================
 
-cat("============================================\n")
-cat("Running ARCH workflow...\n")
-cat("============================================\n\n")
+CODE_DIR <- "/code"
+assign("CODE_DIR", CODE_DIR, envir = .GlobalEnv)
 
-# 🔥 强制切换到 /code 目录
-setwd("/code")
-
-cat("Working directory:\n")
-print(getwd())
+cat("CODE_DIR set to:\n")
+print(CODE_DIR)
 cat("\n")
 
-# ============================================================
-# 创建输出目录
-# ============================================================
-
 run_id  <- format(Sys.time(), "%Y%m%d_%H%M%S")
-run_dir <- file.path("..", "results", paste0("run_", run_id))
+run_dir <- file.path(CODE_DIR, "..", "results", paste0("run_", run_id))
 dir.create(run_dir, recursive = TRUE, showWarnings = FALSE)
 
 assign("run_dir", run_dir, envir = .GlobalEnv)
@@ -27,28 +34,21 @@ assign("run_dir", run_dir, envir = .GlobalEnv)
 cat("Outputs will be saved in:\n")
 cat(run_dir, "\n\n")
 
-# ============================================================
-# 运行敏感性分析
-# ============================================================
-
 cat("Running ARCH sensitivity analysis...\n")
-source("04_ARCH_sensitivity.R")
 
-# ============================================================
-# 按顺序运行所有 Figure
-# ============================================================
+source(file.path(CODE_DIR, "04_ARCH_sensitivity.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig1_CE_map.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig1_trend.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig1_US_map.R"), local = new.env())
 
-cat("Generating figures...\n")
+source(file.path(CODE_DIR, "Fig2a_CE_map.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig2a_US_map.R"), local = new.env())
 
-source("Fig1_CE_map.R")
-source("Fig1_trend.R")
-source("Fig1_US_map.R")
-source("Fig2a_CE_map.R")
-source("Fig2a_US_map.R")
-source("Fig2b.R")
-source("Fig2c.R")
-source("Fig2d.R")
-source("Fig6_ARCH_example.R")
+source(file.path(CODE_DIR, "Fig2b.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig2c.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig2d.R"), local = new.env())
+
+source(file.path(CODE_DIR, "Fig6_ARCH_example.R"), local = new.env())
 
 cat("\n============================================\n")
 cat("All scripts completed successfully.\n")

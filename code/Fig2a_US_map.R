@@ -6,11 +6,6 @@ sf::sf_use_s2(FALSE)
 library(tmap)
 library(tigris)
 
-options(stringsAsFactors = FALSE)
-
-rm(list = ls())  
-cat("\014")      
-
 temporal_AT = read_csv("data/Tmax_US_LamaH.csv", 
                        col_names = TRUE, cols(.default = col_double(), t = col_date("%Y/%m/%d")))
 
@@ -50,11 +45,6 @@ gage_LamaH = map_LamaH %>%
   ) %>%
   st_as_sf(coords = c("lon_deg", "lat_deg"), crs = 4269)
 
-tempdir <- function() "D:/Rtemp"
-unlockBinding("tempdir", baseenv())
-utils::assignInNamespace("tempdir", tempdir, ns = "base", envir = baseenv())
-assign("tempdir", tempdir, baseenv())
-lockBinding("tempdir", baseenv())
 
 us_geo <- tigris::states(class = "sf")
 
@@ -116,4 +106,4 @@ map1 = tm_shape(contiguous_states, projection = 5070) +
 map1
 
 dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
-tmap_save(map1, filename = "results/Fig2/map_US_ARCH.png", dpi = 600)
+tmap_save(map1, filename = "results/Fig2/Fig2_map_US_ARCH.png", dpi = 600)

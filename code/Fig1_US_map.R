@@ -6,14 +6,6 @@ sf::sf_use_s2(FALSE)
 library(tmap)
 library(tigris)
 
-options(tigris_use_cache = TRUE)
-dir.create("tmp", showWarnings = FALSE, recursive = TRUE)
-tempdir <- function() normalizePath("tmp")
-unlockBinding("tempdir", baseenv())
-utils::assignInNamespace("tempdir", tempdir, ns = "base", envir = baseenv())
-assign("tempdir", tempdir, baseenv())
-lockBinding("tempdir", baseenv())
-
 temporal_US <- read_csv(
   "data/Tmax_US_LamaH.csv",
   col_names = TRUE,
@@ -162,6 +154,6 @@ map_inten_US <- make_us_map_simple(
 )
 
 dir.create("results/Fig1", recursive = TRUE, showWarnings = FALSE)
-tmap_save(map_freq_US,  "results/Fig1_US_RHW_frequency.png",  dpi = 600, width = 8, height = 5)
-tmap_save(map_dur_US,   "results/Fig1_US_RHW_duration.png",   dpi = 600, width = 8, height = 5)
-tmap_save(map_inten_US, "results/Fig1_US_RHW_intensity.png",  dpi = 600, width = 8, height = 5)
+tmap_save(map_freq_US,  "results/Fig1/Fig1_US_RHW_frequency.png",  dpi = 600, width = 8, height = 5)
+tmap_save(map_dur_US,   "results/Fig1/Fig1_US_RHW_duration.png",   dpi = 600, width = 8, height = 5)
+tmap_save(map_inten_US, "results/Fig1/Fig1_US_RHW_intensity.png",  dpi = 600, width = 8, height = 5)

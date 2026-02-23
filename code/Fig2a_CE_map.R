@@ -50,11 +50,6 @@ gage_LamaH = map_LamaH %>%
   ) %>%
   st_as_sf(coords = c("lon_deg", "lat_deg"), crs = 4269)
 
-tempdir <- function() "D:/Rtemp"
-unlockBinding("tempdir", baseenv())
-utils::assignInNamespace("tempdir", tempdir, ns = "base", envir = baseenv())
-assign("tempdir", tempdir, baseenv())
-lockBinding("tempdir", baseenv())
 
 us_geo <- tigris::states(class = "sf")
 
