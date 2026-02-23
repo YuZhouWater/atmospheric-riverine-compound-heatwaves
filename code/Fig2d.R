@@ -147,5 +147,5 @@ p1 <- ggplot(combined_data, aes(x = Year, y = MEAN, color = land_type, fill = la
   )
 
 print(p1)
-
-ggsave("results/ARCH_elevation_trend.png", p1, dpi = 600, width = 9, height = 6)
+dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
+ggsave("results/Fig2/Fig2d.png", p1, dpi = 600, width = 9, height = 6)

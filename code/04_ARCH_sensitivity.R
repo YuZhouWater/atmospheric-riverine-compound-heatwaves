@@ -136,8 +136,11 @@ p1 <- ggplot(combined_data, aes(x = Year, y = MEAN, color = land_type, fill = la
 
 # Display the plot
 print(p1)
+# 创建 Supplementary 文件夹（如果不存在）
+dir.create("results/Supplementary", recursive = TRUE, showWarnings = FALSE)
+
 ggsave(
-  filename = "results/ARCH_frequency_trend.png",
+  filename = "results/Supplementary/ARCH_sensitivity_plot.png",
   plot = p1,
   dpi = 300,
   width = 10,
@@ -159,5 +162,5 @@ print(metrics_table)
 # Save the metrics table as CSV
 write_csv(
   metrics_table,
-  "results/ARCH_frequency_summary.csv"  # Save the metrics table to the 'result' folder
+  "results/Supplementary/ARCH_sensitivity_summary.csv"  # Save the metrics table to the 'result' folder
 )

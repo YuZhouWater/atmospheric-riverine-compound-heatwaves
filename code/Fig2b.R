@@ -49,4 +49,5 @@ p <- ggplot(df, aes(x = Period, y = Percentage, fill = FreqClass)) +
 print(p)
 
 # 保存
-ggsave("results/ARCH_distribution.png", p, width = 8, height = 6, dpi = 600)
+dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
+ggsave("results/Fig2/Fig2b.png", p, width = 8, height = 6, dpi = 600)

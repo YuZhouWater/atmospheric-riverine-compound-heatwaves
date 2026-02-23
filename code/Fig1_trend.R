@@ -5,10 +5,7 @@
 # - Theil–Sen trend estimation: openair::TheilSen (annual aggregation)
 # - Time series panels: (a)(c)(e) with mean ± SD ribbon and trend line
 # - Growth bars: (b)(d)(f), comparing 1981–1990 vs 2010–2019 (% change)
-#
-# Output:
-# - ../results/final_combined_plot.png
-# ============================================================
+
 setwd("..")
 suppressPackageStartupMessages({
   library(readr)
@@ -17,15 +14,14 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(openair)
   library(patchwork)
-  library(scales)   # alpha()
-  library(grid)     # unit()
+  library(scales)  
+  library(grid)    
 })
 
-# -----------------------------
-# 0) Paths (Code Ocean friendly)
-# -----------------------------
+
 in_dir  <- "../data"
-out_dir <- "../results"
+dir.create("results/Fig1", recursive = TRUE, showWarnings = FALSE)
+out_dir <- "../results/Fig1"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 # -----------------------------
@@ -346,7 +342,7 @@ combined_plot3 <- (p3 | p6) + plot_layout(widths = c(7.5, 2.5))
 final_combined_plot <- combined_plot1 / combined_plot2 / combined_plot3
 
 ggsave(
-  filename = file.path(out_dir, "RHW_AHW_trend_plot.png"),
+  filename = file.path(out_dir, "Fig1_trend_plot.png"),
   plot     = final_combined_plot,
   dpi      = 600,
   width    = 12,
@@ -421,5 +417,4 @@ output_df <- tibble::tibble(
   dplyr::arrange(Metric)
 
 # ---- 3) Save
-readr::write_csv(output_df, file.path(out_dir, "RHW_AHW_trend_summary.csv"))
-readr::write_tsv(output_df, file.path(out_dir, "RHW_AHW_trend_summary.tsv"))
+readr::write_csv(output_df, file.path(out_dir, "Fig1_trend_summary.csv"))

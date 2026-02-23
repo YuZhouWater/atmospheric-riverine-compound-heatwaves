@@ -81,10 +81,9 @@ theme(
   panel.background = element_rect(fill = "white"),
   plot.margin = margin(20, 20, 20, 20)
 )
-# ===============================
-# 保存到 Code Ocean 输出目录
-# ===============================
-ggsave("/results/ARCH_elevation_density.png",
+
+dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
+ggsave("/results/Fig2/Fig2c.png",
        p1,
        dpi = 600,
        width = 12,

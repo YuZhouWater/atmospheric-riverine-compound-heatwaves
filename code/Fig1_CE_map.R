@@ -11,9 +11,9 @@ unlockBinding("tempdir", baseenv())
 utils::assignInNamespace("tempdir", tempdir, ns = "base", envir = baseenv())
 assign("tempdir", tempdir, baseenv())
 lockBinding("tempdir", baseenv())
-
+dir.create("results/Fig1", recursive = TRUE, showWarnings = FALSE)
 basemap_dir <- "/data/LamaH/basemap"
-results_dir <- "/results"
+results_dir <- "/results/Fig1"
 dir.create(results_dir, showWarnings = FALSE, recursive = TRUE)
 
 temporal_path <- "data/Tmax_US_LamaH.csv"
@@ -219,6 +219,6 @@ tmap_save(map_inten_CE, file.path(results_dir, "CE_RHW_intensity.png"),  dpi = 6
 
 
 cat("Saved:\n",
-    file.path(results_dir, "CE_RHW_frequency.png"), "\n",
-    file.path(results_dir, "CE_RHW_duration.png"), "\n",
-    file.path(results_dir, "CE_RHW_intensity.png"), "\n")
+    file.path(results_dir, "Fig1_CE_RHW_frequency.png"), "\n",
+    file.path(results_dir, "Fig1_CE_RHW_duration.png"), "\n",
+    file.path(results_dir, "Fig1_CE_RHW_intensity.png"), "\n")
