@@ -78,7 +78,7 @@ contiguous_states <- us_geo %>%
   filter(STUSPS != "AK") %>% 
   filter(STUSPS != "HI")
 
-data2 <- read_csv("data/arrtibute796.csv")
+data2 <- read_csv("data/attributes/arrtibute796.csv")
 
 # 合并列 - 保持sf对象，只添加新列
 gage_US$ele_mt_sav <- data2$ele_mt_sav[1:580]

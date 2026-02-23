@@ -6,24 +6,15 @@ library(openair)
 library(readr)
 library(ggpubr)
 
-# ===============================
-# 读取数据（Code Ocean）
-# ===============================
 data <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data2 <- read_csv("data/arrtibute796.csv")
+data2 <- read_csv("data/attributes/arrtibute796.csv")
 
-# ===============================
-# 添加海拔行为最后一行
-# ===============================
 new_row <- as.data.frame(t(data2$ele_mt_sav))
 colnames(new_row) <- colnames(data)[2:797]
 
 data_with_new_row <- rbind(data[, 2:797], new_row)
 elevation_data <- data_with_new_row[nrow(data_with_new_row), ]
 
-# ===============================
-# 按海拔分组
-# ===============================
 range_1 <- which(elevation_data >= 0 & elevation_data <= 1000)
 range_2 <- which(elevation_data > 1000 & elevation_data <= 2000)
 range_3 <- which(elevation_data > 2000 & elevation_data <= 3000)
@@ -51,8 +42,6 @@ data_total$MEAN <- apply(data_total[, -1], 1, mean, na.rm = TRUE)
 data_total$STD  <- apply(data_total[, -1], 1, sd, na.rm = TRUE)
 data_total$year <- years
 
-# ===============================
-# Theil–Sen 趋势函数
 # ===============================
 process_data <- function(data_frame) {
 
@@ -86,18 +75,14 @@ process_data <- function(data_frame) {
   return(list(data = data1, trend = trend_info))
 }
 
-# ===============================
-# 处理数据
-# ===============================
+
 res1 <- process_data(data_range_1)
 res2 <- process_data(data_range_2)
 res3 <- process_data(data_range_3)
 res4 <- process_data(data_range_4)
 resT <- process_data(data_total)
 
-# ===============================
-# 合并绘图数据
-# ===============================
+
 combined_data <- bind_rows(
   mutate(res1$data, land_type = "0–1000 m"),
   mutate(res2$data, land_type = "1000–2000 m"),
@@ -111,9 +96,6 @@ combined_data$land_type <- factor(
   levels = c("0–1000 m", "1000–2000 m", "2000–3000 m", "≥3000 m", "Total")
 )
 
-# ===============================
-# 构造底部趋势文本
-# ===============================
 trend_text <- paste0(
   "0–1000 m: Slope = ", round(res1$trend$slope,3),
   res1$trend$p_stars,
@@ -128,9 +110,7 @@ trend_text <- paste0(
   " (", round(resT$trend$slope_percent,2), "% yr⁻¹)"
 )
 
-# ===============================
-# 绘图
-# ===============================
+
 p1 <- ggplot(combined_data, aes(x = Year, y = MEAN, color = land_type, fill = land_type)) +
   geom_ribbon(aes(ymin = MEAN - STD, ymax = MEAN + STD), alpha = 0.2) +
   geom_line(linewidth = 1) +

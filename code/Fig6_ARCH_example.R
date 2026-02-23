@@ -1,8 +1,3 @@
-#!/usr/bin/env Rscript
-# -----------------------------------------------------
-# Detect and plot compound heatwaves (RHW & AHW)
-# Code Ocean compatible script.
-# -----------------------------------------------------
 setwd("..")
 # Load necessary libraries
 suppressPackageStartupMessages({
@@ -17,20 +12,12 @@ suppressPackageStartupMessages({
   library(cowplot)
 })
 
-# -----------------------------
-# 1) Parameters & paths
-# -----------------------------
-# Set file paths relative to the Code Ocean environment
 data_RHW_path <- "data/temp_WT.csv"
 data_AHW_path <- "data/Tmax_US_LamaH.csv"
 
-# Output path for the main plot and zoom plot (Code Ocean relative path)
 main_plot_path <- "results/ARCH_main_plot.png"
 zoom_plot_path <- "results/ARCH_zoom_plot.png"
 
-# -----------------------------
-# 2) Read data (wide -> long)
-# -----------------------------
 read_wide_temp <- function(path) {
   dat <- read_csv(
     path,
