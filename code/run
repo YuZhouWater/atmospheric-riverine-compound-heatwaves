@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -ex
+
+# This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
+Rscript Fig1_map.R "$@"
+
+# The previous version of this file was commented-out and follows below:
+#
+# Rscript 04.analyze_RHW_AHW_trend.R "$@"
+# 
+# # The previous version of this file was commented-out and follows below:
+# #
+# # Rscript 00.run_first.R "$@"
+# # 
+# 

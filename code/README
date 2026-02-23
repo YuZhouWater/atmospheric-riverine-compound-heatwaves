@@ -1,0 +1,29 @@
+ARCH / RHW / AHW Workflow (Code Ocean Capsule)
+
+This capsule contains six fully independent R scripts for detecting atmospheric heatwaves (AHW), riverine heatwaves (RHW), and their compound events (ARCH), as well as computing annual frequencies, trend statistics, and generating example figures.
+
+Script Execution
+
+All scripts read input files from the data/ directory.
+
+Each script is fully standalone and can be executed independently in Code Ocean.
+
+All required R packages have been pre-installed and are available in the current environment.
+
+To reduce computational overhead and reproduction time, we provide precomputed outputs from Scripts 01–03 in the data/ directory. Users may:
+
+Rerun Scripts 01–03 from scratch to fully reproduce the workflow, or
+
+Start directly from Script 04 using the provided intermediate outputs.
+
+00.run_first.R: runs Scripts 04–06 sequentially using the precomputed outputs already provided in data/.
+
+Notes on Temperature Data
+
+The manuscript-ready river water temperature (WT) dataset is currently stored on a separate computer and is not included in this capsule.
+
+Therefore, this version uses an alternative TEMP dataset as a placeholder.
+
+As a result, certain numerical outputs (e.g., annual frequencies and trend estimates) may differ slightly at the decimal level from those reported in the manuscript. These differences do not affect the methodological framework or workflow logic.
+
+The WT dataset and all dependent outputs will be updated immediately upon return.
