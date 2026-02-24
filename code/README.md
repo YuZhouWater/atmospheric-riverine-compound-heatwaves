@@ -1,40 +1,23 @@
 # README
 ## Overview
 
-This capsule contains the code and data required to reproduce the core analytical workflow described in the manuscript. Specifically, it supports the reproduction of the following items:
-- Figure 1
-- Figure 2
-- Figure 6
+This capsule contains the code and data required to demonstrate the core analytical workflow described in the submitted manuscript. To ensure efficient runtime and manageable data volume for peer review, here we prioritize the reproduction of Figures 1, 2, and 6.
 
-
-
-
-
-The recommended starting point for peer review is:
-code/00_run_first.R
-
-Running this script is sufficient to regenerate all panels of:
-- Figure 1
-- Figure 2
-- Figure 6
-as reported in the manuscript.
-All required intermediate datasets are already included in the data/ directory to ensure efficient execution during peer review.
+The recommended starting point for peer review is: **code/00_run_first.R**, all required datasets are already included in the **data/** directory to ensure efficient execution.
 
 ## Important note on figure layout
 
-The final multi-panel figures presented in the manuscript were assembled and refined manually using Adobe Illustrator after generating individual panels via code. Therefore, this capsule reproduces all individual figure panels. It does not reproduce the exact composite layout shown in the manuscript.
+The final multi-panel figures presented in the manuscript were assembled and refined manually using Adobe Illustrator, following the generation of individual panels by the code. As such, this capsule reproduces all individual figure panels, not the exact final layout or composite panels as they appear in the manuscript.
 
-In addition, minor aesthetic differences (e.g., font, color, legend) may occur due to differences in package versions between the Code Ocean environment and the local desktop environment used during manuscript preparation. The underlying data, analytical workflow, and scientific conclusions remain unchanged.
+In addition, due to differences in package versions between the Code Ocean and local desktop environments, the figures generated here may exhibit minor aesthetic variations (e.g., font, color, legend) from those in the submitted manuscript. The underlying results and conclusions remain unchanged.
 
 ## Capsule Structure
 
 This capsule is organized into three main directories:
-1) code/
+1) **code/**, includes R scripts for riverine heatwave detection, analysis, and plotting
 
-Contains all R scripts used for detection, analysis, and plotting.
-Recommended execution
-Reviewers should run:
-00_run_first.R
+
+
 
 This script:
 Sets the working directory

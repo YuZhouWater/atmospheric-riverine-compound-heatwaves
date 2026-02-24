@@ -154,6 +154,6 @@ map_inten_US <- make_us_map_simple(
 )
 
 dir.create("results/Fig1", recursive = TRUE, showWarnings = FALSE)
-tmap_save(map_freq_US,  "results/Fig1/Fig1_US_RHW_frequency.png",  dpi = 600, width = 8, height = 5)
-tmap_save(map_dur_US,   "results/Fig1/Fig1_US_RHW_duration.png",   dpi = 600, width = 8, height = 5)
-tmap_save(map_inten_US, "results/Fig1/Fig1_US_RHW_intensity.png",  dpi = 600, width = 8, height = 5)
+tmap_save(map_freq_US,  "results/Fig1/Fig1_map_US_frequency.png",  dpi = 600, width = 8, height = 5)
+tmap_save(map_dur_US,   "results/Fig1/Fig1_map_US_duration.png",   dpi = 600, width = 8, height = 5)
+tmap_save(map_inten_US, "results/Fig1/Fig1_map_US_intensity.png",  dpi = 600, width = 8, height = 5)

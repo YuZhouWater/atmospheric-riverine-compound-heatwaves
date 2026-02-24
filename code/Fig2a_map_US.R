@@ -6,11 +6,6 @@ sf::sf_use_s2(FALSE)
 library(tmap)
 library(tigris)
 
-options(stringsAsFactors = FALSE)
-
-rm(list = ls())  
-cat("\014")      
-
 temporal_AT = read_csv("data/Tmax_US_LamaH.csv", 
                        col_names = TRUE, cols(.default = col_double(), t = col_date("%Y/%m/%d")))
 
@@ -80,77 +75,23 @@ gage_LamaH <- gage_LamaH %>%
   ))
 
 
-sf::sf_use_s2(FALSE)
-tmap_mode("plot")
-
-
-basemap_dir <- "/data/LamaH/basemap"
-gpkg_files <- list.files(basemap_dir, pattern = "\\.gpkg$", full.names = TRUE, recursive = TRUE)
-if (length(gpkg_files) == 0) stop("No .gpkg found in /data/LamaH/basemap")
-
-gpkg_path <- gpkg_files[1]
-layers <- st_layers(gpkg_path)$name
-
-read_layer <- function(layer_name) {
-  if (layer_name %in% layers) {
-    st_read(gpkg_path, layer = layer_name, quiet = TRUE)
-  } else {
-    stop(paste("Layer", layer_name, "not found in gpkg"))
-  }
-}
-
-shp_basin <- read_layer("basin")
-shp_line  <- read_layer("country_line")
-
-shp_basin <- st_make_valid(st_transform(shp_basin, 3035))
-shp_line  <- st_make_valid(st_transform(shp_line, 3035))
-
-# ----------------------------
-gage_LamaH_europe <- gage_LamaH %>%
-  filter(
-    is.finite(lon_deg_save), is.finite(lat_deg_save),
-    lon_deg_save >= -15, lon_deg_save <= 35,
-    lat_deg_save >= 35,  lat_deg_save <= 60
-  )
-
-
-# ----------------------------
-gage_LamaH_3035 <- st_transform(gage_LamaH_europe, 3035)
-
-# ----------------------------
-europe_bbox_ll <- st_as_sfc(
-  st_bbox(c(xmin = -15, xmax = 35, ymin = 35, ymax = 60), crs = 4326)
-)
-
-europe_bbox_3035 <- st_transform(europe_bbox_ll, 3035)
-
-shp_basin_crop <- st_crop(shp_basin, europe_bbox_3035)
-shp_line_crop  <- st_crop(shp_line,  europe_bbox_3035)
-
-# ----------------------------
-# 4️⃣ 绘图
-# ----------------------------
-map2 <- tm_shape(shp_basin_crop) +
+map1 = tm_shape(contiguous_states, projection = 5070) +
   tm_fill(col = "#F2F2F2", alpha = 1) +
-  
-  tm_shape(shp_line_crop) +
-  tm_lines(col = "black", lwd = 1, alpha = 1) +
-  
-  tm_shape(gage_LamaH_3035) +
+  tm_borders(col = "black", lwd = 1, alpha = 1) +
+  tm_shape(gage_US, projection = 5070) +
   tm_bubbles(
     size = "ele_mt_sav_category",
     scale = 3,
     col = "mean_T",
     style = "fixed",
     breaks = c(0, 1, 1.5, 2, 3),
-    labels = c("0–1", "1–1.5", "1.5–2", "2–3"),
+    labels = c("0 to 1", "1 to 1.5", "1.5 to 2", "2 to 3"),
     palette = c("#dadaeb", "#bcbddc", "#756bb1", "#4a1486"),
     border.col = "black",
     legend.size.is.portrait = TRUE,
     title.col = "Annual\nfrequency",
     title.size = "Elevation (m)"
   ) +
-  
   tm_layout(
     frame = FALSE,
     legend.outside = TRUE,
@@ -162,6 +103,7 @@ map2 <- tm_shape(shp_basin_crop) +
     legend.show = FALSE
   )
 
-map2
+map1
+
 dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
-tmap_save(map2, filename = "results/Fig2/Fig2_map_CE_ARCH.png", dpi = 600)
+tmap_save(map1, filename = "results/Fig2/Fig2a_map_US.png", dpi = 600)

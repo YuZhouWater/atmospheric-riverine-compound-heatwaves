@@ -37,12 +37,12 @@ cat(run_dir, "\n\n")
 cat("Running ARCH sensitivity analysis...\n")
 
 source(file.path(CODE_DIR, "04_ARCH_sensitivity.R"), local = new.env())
-source(file.path(CODE_DIR, "Fig1_CE_map.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig1_map_CE.R"), local = new.env())
 source(file.path(CODE_DIR, "Fig1_trend.R"), local = new.env())
-source(file.path(CODE_DIR, "Fig1_US_map.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig1_map_US.R"), local = new.env())
 
-source(file.path(CODE_DIR, "Fig2a_CE_map.R"), local = new.env())
-source(file.path(CODE_DIR, "Fig2a_US_map.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig2a_map_CE.R"), local = new.env())
+source(file.path(CODE_DIR, "Fig2a_map_US.R"), local = new.env())
 
 source(file.path(CODE_DIR, "Fig2b.R"), local = new.env())
 source(file.path(CODE_DIR, "Fig2c.R"), local = new.env())
