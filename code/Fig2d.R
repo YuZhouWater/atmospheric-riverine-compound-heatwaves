@@ -7,7 +7,7 @@ library(readr)
 library(ggpubr)
 
 data <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data2 <- read_csv("data/attributes/arrtibute796.csv")
+data2 <- read_csv("data/Watershed_attraibutes/arrtibute796.csv")
 
 new_row <- as.data.frame(t(data2$ele_mt_sav))
 colnames(new_row) <- colnames(data)[2:797]

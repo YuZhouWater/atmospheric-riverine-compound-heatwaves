@@ -6,7 +6,7 @@ library(ggplot2)
 # ===============================
 # 读取数据（Code Ocean 路径）
 # ===============================
-data1 <- read_csv("data/attributes/arrtibute796.csv")
+data1 <- read_csv("data/Watershed_attraibutes/arrtibute796.csv")
 
 data = read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv")
 data2 <- dplyr::select(data, -year, -MEAN, -STD)

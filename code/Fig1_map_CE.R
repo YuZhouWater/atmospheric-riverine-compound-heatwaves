@@ -12,11 +12,11 @@ dir.create(results_dir, showWarnings = FALSE, recursive = TRUE)
 
 temporal_path <- "data/Tmax_US_LamaH.csv"
 
-freq_path  <- "data/RHW_attributes/RHW_annual_frequency.csv"
-dur_path   <- "data/RHW_attributes/RHW_annual_duration.csv"
-inten_path <- "data/RHW_attributes/RHW_annual_mean_intensity.csv"
+freq_path  <- "data/Heatwave_attributes_RHW/RHW_annual_frequency.csv"
+dur_path   <- "data/Heatwave_attributes_RHW/RHW_annual_duration.csv"
+inten_path <- "data/Heatwave_attributes_RHW/RHW_annual_mean_intensity.csv"
 
-topo_path  <- "data/attributes/attribute_topo_site216.csv"
+topo_path  <- "data/Watershed_attraibutes/attribute_topo_site216.csv"
 
 temporal_US <- read_csv(
   temporal_path,

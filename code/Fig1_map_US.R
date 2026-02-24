@@ -14,9 +14,9 @@ temporal_US <- read_csv(
 )
 target_site_names <- names(temporal_US)[-1]
 
-Rhw_count <- read_csv("data/RHW_attributes/RHW_annual_frequency.csv", show_col_types = FALSE)
-Rhw_duration <- read_csv("data/RHW_attributes/RHW_annual_duration.csv", show_col_types = FALSE)
-Rhw_intensity <- read_csv("data/RHW_attributes/RHW_annual_mean_intensity.csv", show_col_types = FALSE)
+Rhw_count <- read_csv("data/Heatwave_attributes_RHW/RHW_annual_frequency.csv", show_col_types = FALSE)
+Rhw_duration <- read_csv("data/Heatwave_attributes_RHW/RHW_annual_duration.csv", show_col_types = FALSE)
+Rhw_intensity <- read_csv("data/Heatwave_attributes_RHW/RHW_annual_mean_intensity.csv", show_col_types = FALSE)
 
 prep_and_colmean <- function(df, value_name, target_site_names) {
 
@@ -58,7 +58,7 @@ mean_US_all <- site_summary %>%
   )
 
 topo_US <- read_csv(
-  "data/attributes/attribute_topo_site580.csv",
+  "data/Watershed_attraibutes/attribute_topo_site580.csv",
   col_names = TRUE,
   col_types = cols(.default = "d", ID = col_character()),
   show_col_types = FALSE

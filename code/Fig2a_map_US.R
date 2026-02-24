@@ -22,10 +22,10 @@ col_means <- sapply(data2, function(x) mean(x, na.rm = TRUE))
 mean_US = data.frame(ID = ID_US, mean_T = col_means[1:580])
 mean_LamaH = data.frame(ID = ID_LamaH, mean_T = col_means[581:796])
 
-topo_US = read_csv("data/attributes/attribute_topo_site580.csv", 
+topo_US = read_csv("data/Watershed_attraibutes/attribute_topo_site580.csv", 
                    col_names = TRUE, col_types = cols(.default = "d", ID = col_character()))
 
-topo_LamaH = read_csv("data/attributes/attribute_topo_site216.csv", 
+topo_LamaH = read_csv("data/Watershed_attraibutes/attribute_topo_site216.csv", 
                       col_names = TRUE, col_types = cols(.default = "d", ID = col_character()))
 
 map_US = left_join(topo_US, mean_US, by = "ID")
@@ -53,7 +53,7 @@ contiguous_states <- us_geo %>%
   filter(STUSPS != "AK") %>% 
   filter(STUSPS != "HI")
 
-data2 <- read_csv("data/attributes/arrtibute796.csv")
+data2 <- read_csv("data/Watershed_attraibutes/arrtibute796.csv")
 
 gage_US$ele_mt_sav <- data2$ele_mt_sav[1:580]
 gage_LamaH$ele_mt_sav <- data2$ele_mt_sav[581:796]

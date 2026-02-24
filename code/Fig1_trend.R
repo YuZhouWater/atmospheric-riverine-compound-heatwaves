@@ -35,8 +35,8 @@ read_csv_safe <- function(path) {
 # -----------------------------
 # 2) Read inputs (relative paths; Code Ocean)
 # -----------------------------
-ahw_dir <- file.path(in_dir, "AHW_attributes")
-rhw_dir <- file.path(in_dir, "RHW_attributes")
+ahw_dir <- file.path(in_dir, "Heatwave_attributes_AHW")
+rhw_dir <- file.path(in_dir, "Heatwave_attributes_RHW")
 
 Ahw_count     <- read_csv_safe(file.path(ahw_dir, "AHW_annual_frequency.csv"))
 Rhw_count     <- read_csv_safe(file.path(rhw_dir, "RHW_annual_frequency.csv"))
