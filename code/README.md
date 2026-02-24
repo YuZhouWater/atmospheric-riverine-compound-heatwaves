@@ -30,7 +30,7 @@ results/
 │   ├── Fig1_map_US_frequency.png
 │   ├── Fig1_map_US_intensity.png
 │   ├── Fig1_trend_plot.png
-│   ├── Fig1_trend_summary.csv
+│   └── Fig1_trend_summary.csv
 │
 ├── Fig2/
 │   ├── Fig2a_map_CE.png
