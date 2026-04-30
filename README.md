@@ -5,11 +5,6 @@ This repository contains the code and example to demonstrate the core workflow f
 
 The recommended starting point is: code/00_run_first.R, which provides a guided workflow for data processing, analysis and figure generation.
 
-## Important note on figure layout
-
-The final multi-panel figures presented in the manuscript were assembled and refined manually using Adobe Illustrator, following the generation of individual panels by the code. As such, this repository reproduces all individual figure panels, not the exact final layout or composite panels as they appear in the manuscript.
-
-In addition, due to differences in package versions and local desktop environments, the figures generated may exhibit minor aesthetic variations (e.g., font, color, legend) from those in the submitted manuscript. The underlying results and conclusions remain unchanged.
 
 ## Code Structure
 
@@ -51,5 +46,8 @@ results/
 ```
 
 
+## Important note on figure layout
 
+The final multi-panel figures presented in the manuscript were assembled and refined manually using Adobe Illustrator, following the generation of individual panels by the code. As such, this repository reproduces all individual figure panels, not the exact final layout or composite panels as they appear in the manuscript.
 
+In addition, due to differences in package versions and local desktop environments, the figures generated may exhibit minor aesthetic variations (e.g., font, color, legend) from those in the submitted manuscript. The underlying results and conclusions remain unchanged.
