@@ -6,11 +6,9 @@ library(tidyr)
 library(ggplot2)
 library(scales)
 
-# 读取数据
 data <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv") %>%
   select(-MEAN, -STD)
 
-# 1. 按年份划分阶段
 data_period <- data %>%
   mutate(
     Period = case_when(
@@ -23,7 +21,6 @@ data_period <- data %>%
   ) %>%
   filter(!is.na(Period))
 
-# 2. 转成长表：保留每年每个站点的原始频率
 data_long <- data_period %>%
   pivot_longer(
     cols = -c(year, Period),
@@ -32,7 +29,6 @@ data_long <- data_period %>%
   ) %>%
   filter(!is.na(ARCH_freq))
 
-# 3. 按区间分类
 data_long <- data_long %>%
   mutate(
     Group = case_when(
@@ -45,7 +41,6 @@ data_long <- data_long %>%
   ) %>%
   filter(!is.na(Group))
 
-# 4. 统计每个时期内，各区间所占比例
 plot_data <- data_long %>%
   group_by(Period, Group) %>%
   summarise(n = n(), .groups = "drop") %>%
@@ -56,7 +51,6 @@ plot_data <- data_long %>%
   ) %>%
   ungroup()
 
-# 5. 设置顺序
 plot_data$Period <- factor(
   plot_data$Period,
   levels = c("1981–1990", "1991–2000", "2001–2010", "2011–2019")
@@ -67,7 +61,6 @@ plot_data$Group <- factor(
   levels = c("0–1", "1–2", "2–3", "3+")
 )
 
-# 6. 绘图
 p <- ggplot(plot_data, aes(x = Period, y = Percentage, fill = Group)) +
   geom_col(width = 0.75, color = "white", linewidth = 0.6) +
   geom_text(
@@ -107,6 +100,5 @@ p <- ggplot(plot_data, aes(x = Period, y = Percentage, fill = Group)) +
 
 print(p)
 
-# 保存
 dir.create("results/Fig2", recursive = TRUE, showWarnings = FALSE)
 ggsave("results/Fig2/Fig2b.png", p, width = 8, height = 6, dpi = 600)
