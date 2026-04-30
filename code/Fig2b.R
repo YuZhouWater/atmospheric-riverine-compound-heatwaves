@@ -1,49 +1,108 @@
 setwd("..")
 library(tidyverse)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
 
 # 读取数据
-df <- read_delim("data/ARCH_frequency_by_time_gap/ARCH_distribution.txt", delim = "\t")
+data <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv") %>%
+  select(-MEAN, -STD)
 
-# 设置 period 顺序
-df$Period <- factor(
-  df$Period,
+# 1. 按年份划分阶段
+data_period <- data %>%
+  mutate(
+    Period = case_when(
+      year >= 1981 & year <= 1990 ~ "1981–1990",
+      year >= 1991 & year <= 2000 ~ "1991–2000",
+      year >= 2001 & year <= 2010 ~ "2001–2010",
+      year >= 2011 & year <= 2019 ~ "2011–2019",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Period))
+
+# 2. 转成长表：保留每年每个站点的原始频率
+data_long <- data_period %>%
+  pivot_longer(
+    cols = -c(year, Period),
+    names_to = "Site",
+    values_to = "ARCH_freq"
+  ) %>%
+  filter(!is.na(ARCH_freq))
+
+# 3. 按区间分类
+data_long <- data_long %>%
+  mutate(
+    Group = case_when(
+      ARCH_freq >= 0 & ARCH_freq < 1 ~ "0–1",
+      ARCH_freq >= 1 & ARCH_freq < 2 ~ "1–2",
+      ARCH_freq >= 2 & ARCH_freq < 3 ~ "2–3",
+      ARCH_freq >= 3 ~ "3+",
+      TRUE ~ NA_character_
+    )
+  ) %>%
+  filter(!is.na(Group))
+
+# 4. 统计每个时期内，各区间所占比例
+plot_data <- data_long %>%
+  group_by(Period, Group) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(Period) %>%
+  mutate(
+    Percentage = n / sum(n) * 100,
+    label = paste0(round(Percentage, 1), "%")
+  ) %>%
+  ungroup()
+
+# 5. 设置顺序
+plot_data$Period <- factor(
+  plot_data$Period,
   levels = c("1981–1990", "1991–2000", "2001–2010", "2011–2019")
 )
 
-# 🔥 关键：深色放下面（从下往上堆叠）
-df$FreqClass <- factor(
-  df$FreqClass,
+plot_data$Group <- factor(
+  plot_data$Group,
   levels = c("0–1", "1–2", "2–3", "3+")
 )
 
-# 绘图
-p <- ggplot(df, aes(x = Period, y = Percentage, fill = FreqClass)) +
-  geom_bar(stat = "identity", width = 0.8, color = "white") +
+# 6. 绘图
+p <- ggplot(plot_data, aes(x = Period, y = Percentage, fill = Group)) +
+  geom_col(width = 0.75, color = "white", linewidth = 0.6) +
   geom_text(
-    aes(label = sprintf("%.1f%%", Percentage)),
+    aes(label = label),
     position = position_stack(vjust = 0.5),
-    color = "white",
-    size = 5,
-    fontface = "bold"
+    size = 4,
+    color = "black"
   ) +
   scale_fill_manual(
     values = c(
-      "3+"  = "#5A189A",
-      "2–3" = "#7B68EE",
-      "1–2" = "#B8B8D8",
-      "0–1" = "#D9D9E8"
+      "0–1" = "#d9d9e8",
+      "1–2" = "#b4b4d8",
+      "2–3" = "#7e6bb3",
+      "3+"  = "#4b007d"
     ),
     name = "Annual\nARCH\nfrequency"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 100),
+    breaks = seq(0, 100, 20),
+    expand = c(0, 0)
   ) +
   labs(
     x = "Period",
     y = "Percentage (%)"
   ) +
-  theme_minimal(base_size = 16) +
+  theme_bw() +
   theme(
     panel.grid = element_blank(),
-    axis.line = element_line(color = "black", linewidth = 1),
-    legend.position = "right"
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 11, color = "black"),
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 10),
+    legend.position = "right",
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.8)
   )
 
 print(p)
