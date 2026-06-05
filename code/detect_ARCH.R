@@ -90,12 +90,12 @@ for (i in 1:796) {
   stAHWEvent <- AHW$event$date_start
   edAHWEvent <- AHW$event$date_end
   
-  nRunoffEvent <- length(RHW$event$event_no)
+  nHWEvent <- length(RHW$event$event_no)
   
-  nMRE   <- rep(NA, nRunoffEvent)
-  idxMRE <- matrix(NA, nrow = nRunoffEvent, ncol = 10)
+  nMRE   <- rep(NA, nHWEvent)
+  idxMRE <- matrix(NA, nrow = nHWEvent, ncol = 10)
   
-  for (j in 1:nRunoffEvent) {
+  for (j in 1:nHWEvent) {
     
     curr_RHW <- RHW$event[j, ]
     
