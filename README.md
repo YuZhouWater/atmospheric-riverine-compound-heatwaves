@@ -1,16 +1,16 @@
 # README
 ## Overview
 
-This repository contains the code and example to demonstrate the core workflow for analyzing atmospheric-riverine-compound-heatwaves. 
+This repository contains R scripts and example data for processing, analyzing, and visualizing atmospheric–riverine compound heatwaves across river basins. 
 
-The recommended starting point is: code/00_run_first.R, which provides a guided workflow for data processing, analysis and figure generation.
+The scripts include data handling, riverine and atmospheric heatwave detection, compound-event identification, statistical tests, trend analysis, and figure generation for manuscript preparation.
 
 
 ## Code Structure
 
 This code is organized into three main directories:
-#### 1) **code/**, includes R scripts for riverine heatwave detection, analysis, and plotting
-#### 2) **data/**, includes required input and supplementary datasets to run the scripts 
+#### 1) **code/**, includes R scripts for compound heatwave detection, analysis, and plotting
+#### 2) **data/**, includes example input datasets for running and testing the scripts
 #### 3) **results**/, include plots and output as follows
 
 
@@ -33,10 +33,6 @@ results/
 │   ├── Fig2b.png
 │   ├── Fig2c.png
 │   └── Fig2d.png
-│
-├── Fig6/
-│   ├── Fig6a_ARCH_main.png
-│   └── Fig6b_ARCH_zoom.png
 │
 ├── Supplementary/
 │   ├── ARCH_sensitivity_plot.png
