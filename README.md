@@ -35,6 +35,7 @@ results/
 │   └── Fig2d.png
 │
 ├── Supplementary/
+│   ├── ARCH_example_plot.png
 │   ├── ARCH_sensitivity_plot.png
 │   └── ARCH_sensitivity_summary.csv
 │
