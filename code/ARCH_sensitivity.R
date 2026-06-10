@@ -6,12 +6,12 @@ library(openair)
 library(readr)
 library(ggpubr)
 # Read the CSV files from the specified folder
-data1 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=1.csv")
-data2 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=3.csv")
-data3 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data4 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=10.csv")
-data5 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=15.csv")
-data6 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=20.csv")
+data1 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=1.csv")
+data2 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=3.csv")
+data3 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv")
+data4 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=10.csv")
+data5 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=15.csv")
+data6 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=20.csv")
 
 years <- 1981:2019
 data1 <- data1[, -1]
