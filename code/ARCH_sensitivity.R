@@ -1,4 +1,3 @@
-setwd("..")
 # Load required libraries
 library(dplyr)
 library(ggplot2)
@@ -7,12 +6,12 @@ library(openair)
 library(readr)
 library(ggpubr)
 # Read the CSV files from the specified folder
-data1 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=1.csv")
-data2 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=3.csv")
-data3 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data4 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=10.csv")
-data5 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=15.csv")
-data6 <- read_csv("data/ARCH_frequency_by_time_gap/time_gap=20.csv")
+data1 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=1.csv")
+data2 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=3.csv")
+data3 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=5.csv")
+data4 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=10.csv")
+data5 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=15.csv")
+data6 <- read_csv("D:/论文1/Github/data/ARCH data/ARCH_frequency_by_time_gap/time_gap=20.csv")
 
 years <- 1981:2019
 data1 <- data1[, -1]
@@ -21,10 +20,9 @@ data3 <- data3[, -1]
 data4 <- data4[, -1]
 data5 <- data5[, -1]
 data6 <- data6[, -1]
-# 计算每行的平均值和标准差（不包括时间列）
 data1$MEAN <- apply(data1, 1, mean, na.rm = TRUE)
 data1$STD <- apply(data1, 1, sd, na.rm = TRUE)
-data1$year <- years  # 添加时间列
+data1$year <- years
 
 data2$MEAN <- apply(data2, 1, mean, na.rm = TRUE)
 data2$STD <- apply(data2, 1, sd, na.rm = TRUE)
@@ -68,7 +66,7 @@ process_data <- function(data_frame) {
     avg.time = 'year',
     deseason = TRUE,
     date.format = "%Y",
-    slope.percent = TRUE,
+    slope.percent = FALSE,
     dec.place = 3
   )
   
@@ -136,16 +134,16 @@ p1 <- ggplot(combined_data, aes(x = Year, y = MEAN, color = land_type, fill = la
 
 # Display the plot
 print(p1)
-# 创建 Supplementary 文件夹（如果不存在）
-dir.create("results/Supplementary", recursive = TRUE, showWarnings = FALSE)
 
-ggsave(
-  filename = "results/Supplementary/ARCH_sensitivity_plot.png",
-  plot = p1,
-  dpi = 300,
-  width = 10,
-  height = 6
-)
+# dir.create("results/Supplementary", recursive = TRUE, showWarnings = FALSE)
+# 
+# ggsave(
+#   filename = "results/Supplementary/ARCH_sensitivity_plot.png",
+#   plot = p1,
+#   dpi = 300,
+#   width = 10,
+#   height = 6
+# )
 # Save the final metrics table
 metrics_table <- bind_rows(
   mutate(res1$metrics, dataset = "time_gap=1"),
@@ -160,7 +158,7 @@ metrics_table <- bind_rows(
 print(metrics_table)
 
 # Save the metrics table as CSV
-write_csv(
-  metrics_table,
-  "results/Supplementary/ARCH_sensitivity_summary.csv"  # Save the metrics table to the 'result' folder
-)
+# write_csv(
+#   metrics_table,
+#   "results/Supplementary/ARCH_sensitivity_summary.csv"  # Save the metrics table to the 'result' folder
+# )

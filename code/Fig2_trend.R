@@ -3,51 +3,67 @@ library(ggplot2)
 library(lubridate)
 library(openair)
 library(readr)
-library(ggpubr)
 
 # ===============================
-# 1. 读取数据
+# 1. 读取已经整理好的汇总数据
 # ===============================
 
-data <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data2 <- read_csv("E:/LSTM/data_inputs/DO_US_81-23/MIROC6_us_20241023/arrtibute796.csv")
+ARCH_frequency_elevation_mean_std <- read_csv(
+  "D:/论文1/Github/data/ARCH data/ARCH_freq_by_elevation.csv",
+  show_col_types = FALSE
+)
+
+cat("数据维度：", nrow(ARCH_frequency_elevation_mean_std), "行，",
+    ncol(ARCH_frequency_elevation_mean_std), "列\n")
+print(names(ARCH_frequency_elevation_mean_std))
 
 # ===============================
-# 2. 添加高程数据并划分高程组
+# 2. 从汇总数据中提取5个分组
 # ===============================
 
-new_row <- as.data.frame(t(data2$ele_mt_sav))
-colnames(new_row) <- colnames(data)[2:797]
-
-data_with_new_row <- rbind(data[, 2:797], new_row)
-elevation_data_raw <- data_with_new_row[nrow(data_with_new_row), ]
-
-range_1 <- which(elevation_data_raw >= 0 & elevation_data_raw <= 1000)
-range_2 <- which(elevation_data_raw > 1000 & elevation_data_raw <= 2000)
-range_3 <- which(elevation_data_raw > 2000 & elevation_data_raw <= 3000)
-range_4 <- which(elevation_data_raw > 3000)
-
-years <- 1981:2019
-
-prepare_range <- function(index_vec) {
-  df <- data_with_new_row[, c(1, index_vec)]
-  df <- df[-nrow(df), ]
-  df$MEAN <- apply(df, 1, mean, na.rm = TRUE)
-  df$STD  <- apply(df, 1, sd, na.rm = TRUE)
-  df$year <- years
-  return(df)
+make_group_df <- function(df, mean_col, sd_col) {
+  df %>%
+    transmute(
+      Year = year,
+      MEAN = .data[[mean_col]],
+      STD  = .data[[sd_col]]
+    ) %>%
+    filter(Year > 1980) %>%
+    mutate(
+      date = as.Date(paste0(Year, "-01-01")),
+      date = ymd_hms(paste(date, "00:00:00"))
+    )
 }
 
-data_range_1 <- prepare_range(range_1)
-data_range_2 <- prepare_range(range_2)
-data_range_3 <- prepare_range(range_3)
-data_range_4 <- prepare_range(range_4)
+data_total <- make_group_df(
+  ARCH_frequency_elevation_mean_std,
+  "total_mean",
+  "total_sd"
+)
 
-# Total
-data_total <- data
-data_total$MEAN <- apply(data_total[, -1], 1, mean, na.rm = TRUE)
-data_total$STD  <- apply(data_total[, -1], 1, sd, na.rm = TRUE)
-data_total$year <- years
+data_range_1 <- make_group_df(
+  ARCH_frequency_elevation_mean_std,
+  "elevation_0_1000m_mean",
+  "elevation_0_1000m_sd"
+)
+
+data_range_2 <- make_group_df(
+  ARCH_frequency_elevation_mean_std,
+  "elevation_1000_2000m_mean",
+  "elevation_1000_2000m_sd"
+)
+
+data_range_3 <- make_group_df(
+  ARCH_frequency_elevation_mean_std,
+  "elevation_2000_3000m_mean",
+  "elevation_2000_3000m_sd"
+)
+
+data_range_4 <- make_group_df(
+  ARCH_frequency_elevation_mean_std,
+  "elevation_above_3000m_mean",
+  "elevation_above_3000m_sd"
+)
 
 # ===============================
 # 3. Theil-Sen 趋势计算函数
@@ -55,16 +71,8 @@ data_total$year <- years
 
 process_data <- function(data_frame) {
   
-  new_dataset <- data_frame %>%
-    select(year, STD, MEAN)
-  
-  colnames(new_dataset) <- c("Year", "STD", "MEAN")
-  
-  fit_data <- new_dataset %>%
-    filter(Year > 1980)
-  
-  fit_data$date <- as.Date(paste0(fit_data$Year, "-01-01"))
-  fit_data$date <- ymd_hms(paste(fit_data$date, "00:00:00"))
+  fit_data <- data_frame %>%
+    select(date, Year, MEAN, STD)
   
   sen1 <- TheilSen(
     fit_data,
@@ -76,9 +84,6 @@ process_data <- function(data_frame) {
     plot = FALSE
   )
   
-  data1 <- sen1$data$main.data %>%
-    left_join(fit_data, by = "date")
-  
   trend_info <- data.frame(
     slope = sen1$data$res2$slope,
     slope_percent = sen1$data$res2$slope.percent,
@@ -88,7 +93,7 @@ process_data <- function(data_frame) {
   coef_info <- sen1$data$res2
   
   return(list(
-    data = data1,
+    data = fit_data,
     trend = trend_info,
     coef = coef_info
   ))
@@ -132,13 +137,11 @@ trend_text <- paste0(
 )
 
 # ===============================
-# 5. 显式提取 Total 的 Theil-Sen 系数
+# 5. 提取 Total 的 Theil-Sen 系数
 # ===============================
 
 coefT <- resT$coef
 
-# 自检 b 的单位是否和 slope 对应
-# 通常 b 是按 day 的斜率，slope 是换算到 year 的斜率
 cat("\n===== Theil-Sen coefficient unit check =====\n")
 cat("coefT$b * 365.25 =", coefT$b[1] * 365.25, "\n")
 cat("reported slope   =", coefT$slope[1], "\n")
@@ -324,17 +327,15 @@ print(fit_change)
 # ===============================
 # 11. 保存 EPS
 # ===============================
-# 
+
 # out_dir <- "D:/论文1/代码图片终版/plot-v01/plot2"
 # dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 # 
 # ggsave(
-#   filename = file.path(out_dir, "Fig2d-v02.eps"),
+#   filename = file.path(out_dir, "Fig2d.eps"),
 #   plot = p1,
 #   device = cairo_ps,
 #   width = 9,
 #   height = 6,
 #   units = "in"
 # )
-# 
-# cat("\nFigure saved to:", file.path(out_dir, "Fig2d-v02.eps"), "\n")
