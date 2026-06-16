@@ -25,7 +25,6 @@ data/
 │   ├── ARCH_frequency_by_time_gap/
 │   ├── future_projection/
 │   ├── AHW-RHW-metric.csv
-│   ├── ARCH_freq_by_elevation.csv
 │   ├── attribute_data.csv
 │   ├── example_40_rivers_DO.csv
 │   ├── example_40_rivers_Tmax.csv
@@ -46,7 +45,7 @@ Detects atmospheric heatwaves, riverine heatwaves, and atmospheric–riverine co
 Calculates and visualizes trends in AHW and RHW characteristics.
 
 `ARCH_trend_analysis.R`
-Analyzes how ARCH frequency trends vary across elevation classes.
+Calculates the trend in ARCH frequency.
 
 `ARCH_sensitivity.R`
 Tests the sensitivity of ARCH identification to different compound-event time windows.
@@ -64,9 +63,6 @@ Future projection data used to analyze changes in heatwave duration and compound
 
 `AHW-RHW-metric.csv`
 Summary metrics of atmospheric and riverine heatwaves.
-
-`ARCH_freq_by_elevation.csv`
-ARCH frequency summarized by elevation classes.
 
 `example_40_rivers_Tmax.csv`
 Example Tmax data used for AHWs detection and ARCHs detection.
