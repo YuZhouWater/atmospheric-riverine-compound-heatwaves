@@ -1,24 +1,17 @@
+# This script calculates and visualizes the trend in ARCH frequency.
+# It plots the annual mean frequency with uncertainty and reports fitted changes.
+
 library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(openair)
 library(readr)
 
-# ===============================
-# 1. 读取数据
-# ===============================
 
 data <- read_csv(
   "D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv",
   show_col_types = FALSE
 )
-
-cat("数据维度：", nrow(data), "行，", ncol(data), "列\n")
-print(names(data))
-
-# ===============================
-# 2. 计算 Total ARCH frequency
-# ===============================
 
 years <- 1981:2019
 
@@ -34,10 +27,6 @@ data_total <- data %>%
     date = as.Date(paste0(Year, "-01-01")),
     date = ymd_hms(paste(date, "00:00:00"))
   )
-
-# ===============================
-# 3. Theil-Sen 趋势计算
-# ===============================
 
 fit_data <- data_total %>%
   select(date, Year, MEAN, STD)
@@ -70,10 +59,6 @@ cat(
   "% yr⁻¹)\n"
 )
 
-# ===============================
-# 4. 计算 Theil-Sen 拟合线
-# ===============================
-
 total_fit_line <- data_total %>%
   mutate(
     date_for_fit = as.Date(paste0(Year, "-01-01")),
@@ -90,10 +75,6 @@ trend_text <- paste0(
   round(trend_total$slope_percent, 3),
   "% yr⁻¹)"
 )
-
-# ===============================
-# 5. 绘图：只画 Total
-# ===============================
 
 p1 <- ggplot() +
   
@@ -154,9 +135,6 @@ p1 <- ggplot() +
 
 print(p1)
 
-# ===============================
-# 6. 计算 Total 拟合线起点和终点
-# ===============================
 
 total_fit_start_end <- data_total %>%
   mutate(
@@ -220,19 +198,3 @@ fit_change <- total_fit_start_end %>%
 
 cat("\n===== Total fitted change =====\n")
 print(fit_change)
-
-# ===============================
-# 7. 保存 EPS，如需保存再取消注释
-# ===============================
-
-# out_dir <- "D:/论文1/代码图片终版/plot-v01/plot2"
-# dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
-# 
-# ggsave(
-#   filename = file.path(out_dir, "Fig2d_total_ARCH_trend.eps"),
-#   plot = p1,
-#   device = cairo_ps,
-#   width = 9,
-#   height = 6,
-#   units = "in"
-# )
