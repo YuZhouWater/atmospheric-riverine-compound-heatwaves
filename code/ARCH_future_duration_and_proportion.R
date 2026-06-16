@@ -1,3 +1,7 @@
+# ============================================================
+# This script visualizes future heatwave duration under SSP2-4.5 and SSP5-8.5,
+# and calculates compound event proportions for 1981–1990 and 2091–2100.
+# ============================================================
 library(dplyr)
 library(readr)
 library(tidyr)
