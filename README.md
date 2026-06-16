@@ -89,12 +89,14 @@ Observed WT data for LSTM model training and evaluation.
 
 ## Related resources
 
-Other datasets required for the full analysis, including site lists, basin attributes, discharge data and meteorological forcing data, are available from the WT–DO US–CE dataset repository:
+Other datasets required for the full analysis, including site lists, basin attributes, discharge data, and meteorological forcing data, are available from the WT–DO US–CE dataset repository:
 
-WT–DO US–CE dataset
+* [WT–DO US–CE dataset](https://github.com/WeiZhiWater/WT-DO-US-CE-dataset)
+
 The LSTM model used to reconstruct water temperature and dissolved oxygen time series is available from:
 
-WT–DO US–CE LSTM
+* [WT–DO US–CE LSTM](https://github.com/LiReactiveWater/WT-DO-US-CE-LSTM)
+
 
 
 ## Important note on figure layout
