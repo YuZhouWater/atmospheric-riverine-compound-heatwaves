@@ -5,163 +5,76 @@ library(openair)
 library(readr)
 
 # ===============================
-# 1. 读取已经整理好的汇总数据
+# 1. 读取数据
 # ===============================
 
-ARCH_frequency_elevation_mean_std <- read_csv(
-  "D:/论文1/Github/data/ARCH data/ARCH_freq_by_elevation.csv",
+data <- read_csv(
+  "D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv",
   show_col_types = FALSE
 )
 
-cat("数据维度：", nrow(ARCH_frequency_elevation_mean_std), "行，",
-    ncol(ARCH_frequency_elevation_mean_std), "列\n")
-print(names(ARCH_frequency_elevation_mean_std))
+cat("数据维度：", nrow(data), "行，", ncol(data), "列\n")
+print(names(data))
 
 # ===============================
-# 2. 从汇总数据中提取5个分组
+# 2. 计算 Total ARCH frequency
 # ===============================
 
-make_group_df <- function(df, mean_col, sd_col) {
-  df %>%
-    transmute(
-      Year = year,
-      MEAN = .data[[mean_col]],
-      STD  = .data[[sd_col]]
-    ) %>%
-    filter(Year > 1980) %>%
-    mutate(
-      date = as.Date(paste0(Year, "-01-01")),
-      date = ymd_hms(paste(date, "00:00:00"))
-    )
-}
+years <- 1981:2019
 
-data_total <- make_group_df(
-  ARCH_frequency_elevation_mean_std,
-  "total_mean",
-  "total_sd"
-)
-
-data_range_1 <- make_group_df(
-  ARCH_frequency_elevation_mean_std,
-  "elevation_0_1000m_mean",
-  "elevation_0_1000m_sd"
-)
-
-data_range_2 <- make_group_df(
-  ARCH_frequency_elevation_mean_std,
-  "elevation_1000_2000m_mean",
-  "elevation_1000_2000m_sd"
-)
-
-data_range_3 <- make_group_df(
-  ARCH_frequency_elevation_mean_std,
-  "elevation_2000_3000m_mean",
-  "elevation_2000_3000m_sd"
-)
-
-data_range_4 <- make_group_df(
-  ARCH_frequency_elevation_mean_std,
-  "elevation_above_3000m_mean",
-  "elevation_above_3000m_sd"
-)
-
-# ===============================
-# 3. Theil-Sen 趋势计算函数
-# ===============================
-
-process_data <- function(data_frame) {
-  
-  fit_data <- data_frame %>%
-    select(date, Year, MEAN, STD)
-  
-  sen1 <- TheilSen(
-    fit_data,
-    pollutant = "MEAN",
-    avg.time = "year",
-    deseason = TRUE,
-    date.format = "%Y",
-    alpha = 0.05,
-    plot = FALSE
+data_total <- data %>%
+  mutate(
+    MEAN = apply(select(., -1), 1, mean, na.rm = TRUE),
+    STD  = apply(select(., -1), 1, sd, na.rm = TRUE),
+    Year = years
+  ) %>%
+  select(Year, MEAN, STD) %>%
+  filter(Year > 1980) %>%
+  mutate(
+    date = as.Date(paste0(Year, "-01-01")),
+    date = ymd_hms(paste(date, "00:00:00"))
   )
-  
-  trend_info <- data.frame(
-    slope = sen1$data$res2$slope,
-    slope_percent = sen1$data$res2$slope.percent,
-    p_stars = sen1$data$res2$p.stars
-  )
-  
-  coef_info <- sen1$data$res2
-  
-  return(list(
-    data = fit_data,
-    trend = trend_info,
-    coef = coef_info
-  ))
-}
 
 # ===============================
-# 4. 分组趋势计算
+# 3. Theil-Sen 趋势计算
 # ===============================
 
-res1 <- process_data(data_range_1)
-res2 <- process_data(data_range_2)
-res3 <- process_data(data_range_3)
-res4 <- process_data(data_range_4)
-resT <- process_data(data_total)
+fit_data <- data_total %>%
+  select(date, Year, MEAN, STD)
 
-combined_data <- bind_rows(
-  mutate(res1$data, land_type = "0–1000 m"),
-  mutate(res2$data, land_type = "1000–2000 m"),
-  mutate(res3$data, land_type = "2000–3000 m"),
-  mutate(res4$data, land_type = "≥3000 m"),
-  mutate(resT$data, land_type = "Total")
+sen_total <- TheilSen(
+  fit_data,
+  pollutant = "MEAN",
+  avg.time = "year",
+  deseason = TRUE,
+  date.format = "%Y",
+  alpha = 0.05,
+  plot = FALSE
 )
 
-combined_data$land_type <- factor(
-  combined_data$land_type,
-  levels = c("0–1000 m", "1000–2000 m", "2000–3000 m", "≥3000 m", "Total")
+trend_total <- data.frame(
+  slope = sen_total$data$res2$slope,
+  slope_percent = sen_total$data$res2$slope.percent,
+  p_stars = sen_total$data$res2$p.stars
 )
 
-trend_text <- paste0(
-  "0–1000 m: Slope = ", round(res1$trend$slope, 3),
-  res1$trend$p_stars,
-  " (", round(res1$trend$slope_percent, 3), "% yr⁻¹)\n",
-  
-  "≥3000 m: Slope = ", round(res4$trend$slope, 3),
-  res4$trend$p_stars,
-  " (", round(res4$trend$slope_percent, 3), "% yr⁻¹)\n",
-  
-  "Total: Slope = ", round(resT$trend$slope, 3),
-  resT$trend$p_stars,
-  " (", round(resT$trend$slope_percent, 3), "% yr⁻¹)"
+coefT <- sen_total$data$res2
+
+cat("\n===== Total ARCH frequency trend =====\n")
+cat(
+  "Slope =",
+  round(trend_total$slope, 3),
+  trend_total$p_stars,
+  "(",
+  round(trend_total$slope_percent, 3),
+  "% yr⁻¹)\n"
 )
 
 # ===============================
-# 5. 提取 Total 的 Theil-Sen 系数
+# 4. 计算 Theil-Sen 拟合线
 # ===============================
 
-coefT <- resT$coef
-
-cat("\n===== Theil-Sen coefficient unit check =====\n")
-cat("coefT$b * 365.25 =", coefT$b[1] * 365.25, "\n")
-cat("reported slope   =", coefT$slope[1], "\n")
-cat("difference       =", coefT$b[1] * 365.25 - coefT$slope[1], "\n")
-
-# ===============================
-# 6. 提取 Total 和 elevation 分组数据
-# ===============================
-
-total_data <- combined_data %>%
-  filter(land_type == "Total")
-
-elevation_data <- combined_data %>%
-  filter(land_type != "Total")
-
-# ===============================
-# 7. 计算 Total mean 的 Theil-Sen 拟合线
-# ===============================
-
-total_fit_line <- total_data %>%
+total_fit_line <- data_total %>%
   mutate(
     date_for_fit = as.Date(paste0(Year, "-01-01")),
     date_num = as.numeric(date_for_fit),
@@ -169,40 +82,32 @@ total_fit_line <- total_data %>%
   ) %>%
   select(Year, trend_fit)
 
-# ===============================
-# 8. 配色
-# ===============================
-
-plot_cols <- c(
-  "0–1000 m"     = "#B8E186",
-  "1000–2000 m" = "#66BD63",
-  "2000–3000 m" = "#1A9850",
-  "≥3000 m"     = "#006837",
-  "Total"       = "#5E3C99"
+trend_text <- paste0(
+  "Slope = ",
+  round(trend_total$slope, 3),
+  trend_total$p_stars,
+  " (",
+  round(trend_total$slope_percent, 3),
+  "% yr⁻¹)"
 )
 
 # ===============================
-# 9. 绘图
+# 5. 绘图：只画 Total
 # ===============================
 
 p1 <- ggplot() +
   
   geom_ribbon(
-    data = total_data,
+    data = data_total,
     aes(x = Year, ymin = MEAN - STD, ymax = MEAN + STD),
     fill = "#5E3C99",
     alpha = 0.18
   ) +
   
   geom_line(
-    data = elevation_data,
-    aes(x = Year, y = MEAN, color = land_type),
-    linewidth = 0.95
-  ) +
-  
-  geom_line(
-    data = total_data,
-    aes(x = Year, y = MEAN, color = land_type),
+    data = data_total,
+    aes(x = Year, y = MEAN),
+    color = "#5E3C99",
     linewidth = 1.15
   ) +
   
@@ -215,15 +120,13 @@ p1 <- ggplot() +
   
   annotate(
     "text",
-    x = 2001,
+    x = 2000,
     y = 5.15,
     label = trend_text,
-    size = 4.6,
+    size = 5,
     fontface = "bold",
     hjust = 0.5
   ) +
-  
-  scale_color_manual(values = plot_cols) +
   
   scale_y_continuous(
     limits = c(-0.4, 5.5),
@@ -239,29 +142,23 @@ p1 <- ggplot() +
   
   labs(
     x = "Year",
-    y = "ARCH Frequency",
-    color = "Elevation"
+    y = "ARCH Frequency"
   ) +
   
   theme_classic() +
   theme(
     axis.title = element_text(size = 22, color = "black"),
     axis.text  = element_text(size = 17, color = "black"),
-    
-    legend.position = "right",
-    legend.title = element_text(size = 20, face = "bold"),
-    legend.text  = element_text(size = 17),
-    
     panel.grid = element_blank()
   )
 
 print(p1)
 
 # ===============================
-# 10. 计算 Total 拟合线起点和终点的 y 值
+# 6. 计算 Total 拟合线起点和终点
 # ===============================
 
-total_fit_start_end <- total_data %>%
+total_fit_start_end <- data_total %>%
   mutate(
     date_for_fit = as.Date(paste0(Year, "-01-01")),
     date_num = as.numeric(date_for_fit),
@@ -325,14 +222,14 @@ cat("\n===== Total fitted change =====\n")
 print(fit_change)
 
 # ===============================
-# 11. 保存 EPS
+# 7. 保存 EPS，如需保存再取消注释
 # ===============================
 
 # out_dir <- "D:/论文1/代码图片终版/plot-v01/plot2"
 # dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 # 
 # ggsave(
-#   filename = file.path(out_dir, "Fig2d.eps"),
+#   filename = file.path(out_dir, "Fig2d_total_ARCH_trend.eps"),
 #   plot = p1,
 #   device = cairo_ps,
 #   width = 9,
