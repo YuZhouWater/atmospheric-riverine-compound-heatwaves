@@ -45,13 +45,13 @@ Detects atmospheric heatwaves, riverine heatwaves, and atmospheric–riverine co
 Calculates and visualizes trends in AHW and RHW characteristics.
 
 `ARCH_trend_analysis.R`
-Calculates the trend in ARCH frequency.
+Calculates and visualizes the trend in ARCH frequency.
 
 `ARCH_sensitivity.R`
-Tests the sensitivity of ARCH identification to different compound-event time windows.
+Calculates and visualizes ARCH sensitivity to different compound event time windows.
 
 `ARCH_future_duration_and_proportion.R`
-Analyzes future changes in heatwave duration and calculates the proportion of AHW/RHW days occurring as compound events.
+Calculates and visualizes future changes in heatwave duration and compound event proportions.
 
 ## Data description
 
@@ -59,7 +59,7 @@ Analyzes future changes in heatwave duration and calculates the proportion of AH
 Data used for sensitivity analysis under different compound event time windows.
 
 `future_projection/`
-Future projection data used to analyze changes in heatwave duration and compound event proportions.
+Future projection data for heatwave duration and compound-event proportions.
 
 `AHW-RHW-metric.csv`
 Summary metrics of atmospheric and riverine heatwaves.
