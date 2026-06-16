@@ -8,7 +8,7 @@ The repository supports the main analyses used in the manuscript, including heat
 
 ## Structure
 
-This code is organized into three main directories:
+This code is organized into two main directories:
 #### 1) **code/**, includes R scripts for compound heatwave detection, analysis, and plotting
 #### 2) **data/**, includes example input datasets for running and testing the scripts
 
@@ -89,15 +89,12 @@ Observed WT data for LSTM model training and evaluation.
 
 ## Related resources
 
-Other datasets required for the full analysis, including site lists, basin attributes, discharge data, and meteorological forcing data, are available from the WT–DO US–CE dataset repository:
+Other datasets required for the full analysis, including site lists, basin attributes, discharge data and meteorological forcing data, are available from the WT–DO US–CE dataset repository:
 
-`WT–DO US–CE dataset`
-https://github.com/WeiZhiWater/WT-DO-US-CE-dataset
-
+WT–DO US–CE dataset
 The LSTM model used to reconstruct water temperature and dissolved oxygen time series is available from:
 
-`WT–DO US–CE LSTM`
-https://github.com/LiReactiveWater/WT-DO-US-CE-LSTM
+WT–DO US–CE LSTM
 
 
 ## Important note on figure layout
