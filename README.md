@@ -23,14 +23,14 @@ code/
 
 data/
 │   ├── ARCH_frequency_by_time_gap/
-│   ├── future_projection/
+│   ├── Future_projection/
 │   ├── AHW-RHW-metric.csv
-│   ├── attribute_data.csv
-│   ├── example_40_rivers_DO.csv
-│   ├── example_40_rivers_Tmax.csv
-│   ├── example_40_rivers_WT.csv
-│   ├── observed_DO_796_rivers.csv
-│   └── observed_WT_796_rivers.csv
+│   ├── Attribute_data.csv
+│   ├── Example_40_rivers_DO.csv
+│   ├── Example_40_rivers_Tmax.csv
+│   ├── Example_40_rivers_WT.csv
+│   ├── Observed_DO_796_rivers.csv
+│   └── Observed_WT_796_rivers.csv
 
 LICENSE
 ```
@@ -58,28 +58,28 @@ Calculates and visualizes future changes in heatwave duration and compound event
 `ARCH_frequency_by_time_gap/`
 Data used for sensitivity analysis under different compound event time windows.
 
-`future_projection/`
+`Future_projection/`
 Data for future projections of heatwave duration and compound proportions.
 
 `AHW-RHW-metric.csv`
 AHWs and RHWs metric data.
 
-`example_40_rivers_Tmax.csv`
+`Example_40_rivers_Tmax.csv`
 Example Tmax data used for AHWs detection and ARCHs detection.
 
-`example_40_rivers_WT.csv`
+`Example_40_rivers_WT.csv`
 Example WT data used for RHWs and ARCHs detection.
 
-`example_40_rivers_DO.csv`
+`Example_40_rivers_DO.csv`
 Example dissolved oxygen data.
 
-`attribute_data.csv`
+`Attribute_data.csv`
 Static basin attributes used for the LSTM model.
 
-`observed_DO_796_rivers.csv`
+`Observed_DO_796_rivers.csv`
 Observed DO data for LSTM model training and evaluation.
 
-`observed_WT_796_rivers.csv`
+`Observed_WT_796_rivers.csv`
 Observed WT data for LSTM model training and evaluation.
 
 
