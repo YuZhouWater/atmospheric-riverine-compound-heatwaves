@@ -1,4 +1,6 @@
-# Load required libraries
+# This script calculates and visualizes ARCH sensitivity to different compound-event time windows.
+# It compares ARCH frequency trends across time gaps from 1 to 20 days
+# and reports the Theil–Sen trend metrics for each time window.
 library(dplyr)
 library(ggplot2)
 library(lubridate)
