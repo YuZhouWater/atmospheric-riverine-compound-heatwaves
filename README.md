@@ -3,7 +3,7 @@
 
 This repository provides R scripts and example data for detecting, analyzing, and visualizing atmospheric heatwaves (AHWs), riverine heatwaves (RHWs), and atmospheric–riverine compound heatwaves (ARCHs).
 
-The repository supports the main analyses used in the manuscript, including heatwave event detection, compound event identification, trend analysis, sensitivity analysis, future projection analysis, and figure generation.
+The repository supports the main analyses used in the manuscript, including heatwave event detection(AHWs/RHWs), compound event(ARCHs) identification, trend analysis, sensitivity analysis, future projection analysis, and figure generation.
 
 
 ## Structure
@@ -42,7 +42,7 @@ LICENSE
 Detects atmospheric heatwaves, riverine heatwaves, and atmospheric–riverine compound heatwaves.
 
 `AHW_RHW_trend_analysis.R`
-Calculates and visualizes trends in AHW and RHW characteristics.
+Calculates and visualizes trends in AHWs and RHWs characteristics.
 
 `ARCH_trend_analysis.R`
 Calculates and visualizes the trend in ARCH frequency.
@@ -59,10 +59,10 @@ Calculates and visualizes future changes in heatwave duration and compound event
 Data used for sensitivity analysis under different compound event time windows.
 
 `future_projection/`
-Future projection data for heatwave duration and compound-event proportions.
+Data for future projections of heatwave duration and compound proportions.
 
 `AHW-RHW-metric.csv`
-Summary metrics of atmospheric and riverine heatwaves.
+AHWs and RHWs metric data.
 
 `example_40_rivers_Tmax.csv`
 Example Tmax data used for AHWs detection and ARCHs detection.
