@@ -1,5 +1,7 @@
+# ============================================================
 # This script calculates and visualizes the trend in ARCH frequency.
 # It plots the annual mean frequency with uncertainty and reports fitted changes.
+# ============================================================
 
 library(dplyr)
 library(ggplot2)
