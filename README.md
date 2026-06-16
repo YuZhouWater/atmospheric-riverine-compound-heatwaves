@@ -1,46 +1,98 @@
 # README
 ## Overview
 
-This repository contains R scripts and example data for processing, analyzing, and visualizing atmospheric–riverine compound heatwaves across river basins. 
+This repository provides R scripts and example data for detecting, analyzing, and visualizing atmospheric heatwaves (AHWs), riverine heatwaves (RHWs), and atmospheric–riverine compound heatwaves (ARCHs).
 
-The scripts include data handling, riverine and atmospheric heatwave detection, compound-event identification, statistical tests, trend analysis, and figure generation for manuscript preparation.
+The repository supports the main analyses used in the manuscript, including heatwave event detection(AHWs/RHWs), compound event(ARCHs) identification, trend analysis, sensitivity analysis, future projection analysis, and figure generation.
 
 
-## Code Structure
+## Structure
 
-This code is organized into three main directories:
+This code is organized into two main directories:
 #### 1) **code/**, includes R scripts for compound heatwave detection, analysis, and plotting
 #### 2) **data/**, includes example input datasets for running and testing the scripts
-#### 3) **results**/, include plots and output as follows
 
 
 ```text
-results/
-│
-├── Fig1/
-│   ├── Fig1_map_CE_duration.png
-│   ├── Fig1_map_CE_frequency.png
-│   ├── Fig1_map_CE_intensity.png
-│   ├── Fig1_map_US_duration.png
-│   ├── Fig1_map_US_frequency.png
-│   ├── Fig1_map_US_intensity.png
-│   ├── Fig1_trend_plot.png
-│   └── Fig1_trend_summary.csv
-│
-├── Fig2/
-│   ├── Fig2a_map_CE.png
-│   ├── Fig2a_map_US.png
-│   ├── Fig2b.png
-│   ├── Fig2c.png
-│   └── Fig2d.png
-│
-├── Supplementary/
-│   ├── ARCH_example_plot.png
-│   ├── ARCH_sensitivity_plot.png
-│   └── ARCH_sensitivity_summary.csv
-│
-└── output
+code/
+│   ├── AHW_RHW_ARCH_event_detection.R
+│   ├── AHW_RHW_trend_analysis.R
+│   ├── ARCH_future_duration_and_proportion.R
+│   ├── ARCH_sensitivity.R
+│   └── ARCH_trend_analysis.R
+
+data/
+│   ├── ARCH_frequency_by_time_gap/
+│   ├── future_projection/
+│   ├── AHW-RHW-metric.csv
+│   ├── attribute_data.csv
+│   ├── example_40_rivers_DO.csv
+│   ├── example_40_rivers_Tmax.csv
+│   ├── example_40_rivers_WT.csv
+│   ├── observed_DO_796_rivers.csv
+│   └── observed_WT_796_rivers.csv
+
+LICENSE
 ```
+
+
+## Code description
+
+`AHW_RHW_ARCH_event_detection.R`
+Detects atmospheric heatwaves, riverine heatwaves, and atmospheric–riverine compound heatwaves.
+
+`AHW_RHW_trend_analysis.R`
+Calculates and visualizes trends in AHWs and RHWs characteristics.
+
+`ARCH_trend_analysis.R`
+Calculates and visualizes the trend in ARCH frequency.
+
+`ARCH_sensitivity.R`
+Calculates and visualizes ARCH sensitivity to different compound event time windows.
+
+`ARCH_future_duration_and_proportion.R`
+Calculates and visualizes future changes in heatwave duration and compound event proportions.
+
+## Data description
+
+`ARCH_frequency_by_time_gap/`
+Data used for sensitivity analysis under different compound event time windows.
+
+`future_projection/`
+Data for future projections of heatwave duration and compound proportions.
+
+`AHW-RHW-metric.csv`
+AHWs and RHWs metric data.
+
+`example_40_rivers_Tmax.csv`
+Example Tmax data used for AHWs detection and ARCHs detection.
+
+`example_40_rivers_WT.csv`
+Example WT data used for RHWs and ARCHs detection.
+
+`example_40_rivers_DO.csv`
+Example dissolved oxygen data.
+
+`attribute_data.csv`
+Static basin attributes used for the LSTM model.
+
+`observed_DO_796_rivers.csv`
+Observed DO data for LSTM model training and evaluation.
+
+`observed_WT_796_rivers.csv`
+Observed WT data for LSTM model training and evaluation.
+
+
+## Related resources
+
+Other datasets required for the full analysis, including site lists, basin attributes, discharge data, and meteorological forcing data, are available from the WT–DO US–CE dataset repository:
+
+* [WT–DO US–CE dataset](https://github.com/WeiZhiWater/WT-DO-US-CE-dataset)
+
+The LSTM model used to reconstruct water temperature and dissolved oxygen time series is available from:
+
+* [WT–DO US–CE LSTM](https://github.com/LiReactiveWater/WT-DO-US-CE-LSTM)
+
 
 
 ## Important note on figure layout

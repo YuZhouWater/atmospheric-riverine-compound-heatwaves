@@ -40,9 +40,6 @@ get_series <- function(df, event_name, scenario_name) {
     select(year, mean_value = mean_duration)
 }
 
-# ============================================================
-# 1. AHWs duration
-# ============================================================
 
 data_atmospheric_ssp245 <- get_series(
   duration_summary,
@@ -183,11 +180,6 @@ p2 <- ggplot() +
     plot.margin = ggplot2::margin(20, 20, 20, 20)
   )
 
-# ============================================================
-# 2. RHWs duration
-# 注意：这里为了完全复刻你原始代码，仍然沿用 Atmospheric /
-# Atmospheric_Only 作为列名，但实际含义是 River / RHWs only
-# ============================================================
 
 rm(stacked_data585, stacked_data245, stacked_data_long585, stacked_data_long245, stacked_data_long)
 
@@ -334,9 +326,6 @@ p4 <- ggplot() +
 
 p2
 p4
-# ============================================================
-# Calculate percentages for manuscript text
-# ============================================================
 
 pct_result <- duration_summary %>%
   filter(
