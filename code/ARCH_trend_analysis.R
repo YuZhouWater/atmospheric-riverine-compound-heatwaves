@@ -74,7 +74,7 @@ trend_text <- paste0(
   round(trend_total$slope, 3),
   trend_total$p_stars,
   " (",
-  round(trend_total$slope_percent, 3),
+  sprintf("%.2f", trunc(trend_total$slope_percent * 100) / 100),
   "% yr⁻¹)"
 )
 
