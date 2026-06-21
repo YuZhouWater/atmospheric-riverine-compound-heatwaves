@@ -55,13 +55,15 @@ Calculates and visualizes future changes in heatwave duration and compound event
 
 ## Data description
 
-`ARCH_frequency_by_time_gap/
+```text
+ARCH_frequency_by_time_gap/
 ├── time_gap=1.csv
 ├── time_gap=3.csv
 ├── time_gap=5.csv
 ├── time_gap=10.csv
 ├── time_gap=15.csv
-└── time_gap=20.csv`
+└── time_gap=20.csv
+```
 Data used for sensitivity analysis under different compound event time windows.
 
 
