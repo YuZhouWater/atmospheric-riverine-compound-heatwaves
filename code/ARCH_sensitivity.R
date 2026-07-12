@@ -3,166 +3,210 @@
 # It compares ARCH frequency trends across time gaps from 1 to 20 days
 # and reports the Theil–Sen trend metrics for each time window.
 # ============================================================
-library(dplyr)
-library(ggplot2)
-library(lubridate)
-library(openair)
-library(readr)
-library(ggpubr)
-# Read the CSV files from the specified folder
-data1 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=1.csv")
-data2 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=3.csv")
-data3 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv")
-data4 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=10.csv")
-data5 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=15.csv")
-data6 <- read_csv("D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=20.csv")
 
-years <- 1981:2019
-data1 <- data1[, -1]
-data2 <- data2[, -1]
-data3 <- data3[, -1]
-data4 <- data4[, -1]
-data5 <- data5[, -1]
-data6 <- data6[, -1]
-data1$MEAN <- apply(data1, 1, mean, na.rm = TRUE)
-data1$STD <- apply(data1, 1, sd, na.rm = TRUE)
-data1$year <- years
+rm(list = ls())
+gc()
 
-data2$MEAN <- apply(data2, 1, mean, na.rm = TRUE)
-data2$STD <- apply(data2, 1, sd, na.rm = TRUE)
-data2$year <- years  # 添加时间列
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(purrr)
+  library(readr)
+  library(lubridate)
+  library(openair)
+  library(ggplot2)
+  library(ggpubr)
+})
 
-data3$MEAN <- apply(data3, 1, mean, na.rm = TRUE)
-data3$STD <- apply(data3, 1, sd, na.rm = TRUE)
-data3$year <- years  # 添加时间列
+data_dir <- "D:/论文1/Github/data"
 
-data4$MEAN <- apply(data4, 1, mean, na.rm = TRUE)
-data4$STD<- apply(data4, 1, sd, na.rm = TRUE)
-data4$year <- years  # 添加时间列
+input_path <- file.path(
+  data_dir,
+  "ARCH_frequency_by_time_gap.csv"
+)
 
-data5$MEAN <- apply(data5, 1, mean, na.rm = TRUE)
-data5$STD<- apply(data5, 1, sd, na.rm = TRUE)
-data5$year <- years  # 添加时间列
+out_dir <- file.path(data_dir, "results")
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
-data6$MEAN <- apply(data6, 1, mean, na.rm = TRUE)
-data6$STD<- apply(data6, 1, sd, na.rm = TRUE)
-data6$year <- years  # 添加时间列
-data_frame <- data6
+data_all <- read_csv(
+  input_path,
+  show_col_types = FALSE
+)
 
-# Function to process each dataset and calculate mean and std
-process_data <- function(data_frame) {
-  new_dataset <- data_frame %>%
-    select(year, STD, MEAN)  # Select relevant columns
+# Ensure the first column is named year
+names(data_all)[1] <- "year"
+
+plot_data <- data_all %>%
+  pivot_longer(
+    cols = -year,
+    names_to = c("gap", "statistic"),
+    names_pattern = "gap(\\d+)_(mean|sd)",
+    values_to = "value"
+  ) %>%
+  pivot_wider(
+    names_from = statistic,
+    values_from = value
+  ) %>%
+  rename(
+    MEAN = mean,
+    STD  = sd
+  ) %>%
+  mutate(
+    gap = as.numeric(gap),
+    
+    time_gap = factor(
+      paste0("time_gap=", gap),
+      levels = paste0(
+        "time_gap=",
+        c(1, 3, 5, 10, 15, 20)
+      )
+    )
+  ) %>%
+  arrange(gap, year)
+
+# Check the processed data
+print(head(plot_data))
+
+calculate_theil_sen <- function(df) {
   
-  colnames(new_dataset) <- c("Year", "STD", "MEAN")  # Rename for consistency
+  gap_value <- unique(df$gap)
   
-  # Filter data from 1980 onwards
-  fit_data <- new_dataset %>% filter(Year > 1980)
+  fit_data <- df %>%
+    transmute(
+      date = ymd_hms(
+        paste0(year, "-01-01 00:00:00")
+      ),
+      MEAN = MEAN
+    ) %>%
+    filter(
+      !is.na(date),
+      !is.na(MEAN)
+    )
   
-  # Create date column for TheilSen analysis
-  fit_data$date <- ymd_hms(paste0(fit_data$Year, "-01-01 00:00:00"))
-  
-  # TheilSen method for trend analysis
-  sen1 <- TheilSen(
+  sen_result <- TheilSen(
     fit_data,
     pollutant = "MEAN",
-    ylab = "ARCH_count",
-    avg.time = 'year',
-    deseason = TRUE,
+    ylab = "ARCH frequency",
+    avg.time = "year",
+    deseason = FALSE,
     date.format = "%Y",
     slope.percent = FALSE,
     dec.place = 3
   )
   
-  # Return processed data and metrics
-  plot_data <- sen1$data$main.data %>%
-    left_join(fit_data, by = "date")
-  
-  metrics <- tibble(
-    slope = sen1$data$res2$slope,
-    p_stars = sen1$data$res2$p.stars,
-    slope_percent = sen1$data$res2$slope.percent
+  slope_year <- as.numeric(
+    sen_result$data$res2$slope
   )
   
-  return(list(plot = plot_data, metrics = metrics))
+  tibble(
+    time_gap_days = gap_value,
+    slope_year = slope_year,
+    slope_decade = slope_year * 10,
+    p_stars = sen_result$data$res2$p.stars,
+    slope_percent = sen_result$data$res2$slope.percent
+  )
 }
 
-# Process all dataframes
-res1 <- process_data(data1)
-res2 <- process_data(data2)
-res3 <- process_data(data3)
-res4 <- process_data(data4)
-res5 <- process_data(data5)
-res6 <- process_data(data6)
+metrics_table <- plot_data %>%
+  group_split(gap) %>%
+  map_dfr(calculate_theil_sen) %>%
+  arrange(time_gap_days)
 
-# Combine data for plotting
-combined_data <- bind_rows(
-  mutate(res1$plot, land_type = "time_gap=1"),
-  mutate(res2$plot, land_type = "time_gap=3"),
-  mutate(res3$plot, land_type = "time_gap=5"),
-  mutate(res4$plot, land_type = "time_gap=10"),
-  mutate(res5$plot, land_type = "time_gap=15"),
-  mutate(res6$plot, land_type = "time_gap=20")
-)
-
-# Create the plot for trends
-p1 <- ggplot(combined_data, aes(x = Year, y = MEAN, color = land_type, fill = land_type)) +
-  geom_line(size = 1) +  # Plot trend line
-  theme_pubr() +  # Use a clean theme
-  scale_x_continuous(
-    limits = c(1980, 2020),  # Set x-axis limits
-    breaks = seq(1980, 2020, by = 20),  # Set breaks every 20 years
-    expand = c(0, 0)  # Remove extra space
-  ) +
-  theme(
-    axis.title.x = element_text(color = "black", size = 20),
-    axis.title.y = element_text(color = "black", size = 20, margin = ggplot2::margin(r = 15)),
-    axis.text = element_text(size = 20),
-    axis.line = element_line(color = "black", size = 0.8),
-    plot.title = element_text(hjust = 0, face = "bold", size = 30, margin = ggplot2::margin(b = 15)),
-    legend.position = "bottom",  # Place the legend at the bottom
-    legend.title = element_text(size = 18, face = "bold"),
-    legend.text = element_text(size = 18),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = "white"),
-    plot.margin = ggplot2::margin(5, 15, 5, 5),
-    axis.ticks.length = unit(-0.25, "cm"),
-    axis.ticks.x = element_blank(),
-    axis.ticks = element_line(color = "black", size = 0.8)
-  ) +
-  labs(
-    x = "Year",
-    y = "ARCH frequency"
-  )
-
-# Display the plot
-print(p1)
-
-# dir.create("results/Supplementary", recursive = TRUE, showWarnings = FALSE)
-# 
-# ggsave(
-#   filename = "results/Supplementary/ARCH_sensitivity_plot.png",
-#   plot = p1,
-#   dpi = 300,
-#   width = 10,
-#   height = 6
-# )
-# Save the final metrics table
-metrics_table <- bind_rows(
-  mutate(res1$metrics, dataset = "time_gap=1"),
-  mutate(res2$metrics, dataset = "time_gap=3"),
-  mutate(res3$metrics, dataset = "time_gap=5"),
-  mutate(res4$metrics, dataset = "time_gap=10"),
-  mutate(res5$metrics, dataset = "time_gap=15"),
-  mutate(res6$metrics, dataset = "time_gap=20")
-)
-
-# Print the metrics table
 print(metrics_table)
 
-# Save the metrics table as CSV
-# write_csv(
-#   metrics_table,
-#   "results/Supplementary/ARCH_sensitivity_summary.csv"  # Save the metrics table to the 'result' folder
-# )
+p1 <- ggplot(
+  plot_data,
+  aes(
+    x = year,
+    y = MEAN,
+    colour = time_gap,
+    fill = time_gap,
+    group = time_gap
+  )
+) +
+  
+  # Mean ± standard deviation
+  geom_ribbon(
+    aes(
+      ymin = pmax(MEAN - STD, 0),
+      ymax = MEAN + STD
+    ),
+    alpha = 0.08,
+    colour = NA
+  ) +
+  
+  # Annual mean frequency
+  geom_line(
+    linewidth = 1
+  ) +
+  
+  scale_x_continuous(
+    limits = c(1980, 2020),
+    breaks = seq(1980, 2020, by = 20),
+    expand = c(0, 0)
+  ) +
+  
+  labs(
+    x = "Year",
+    y = expression("ARCH frequency (events yr"^{-1}*")"),
+    colour = "Time window",
+    fill = "Time window"
+  ) +
+  
+  theme_pubr() +
+  
+  theme(
+    axis.title.x = element_text(
+      colour = "black",
+      size = 20
+    ),
+    
+    axis.title.y = element_text(
+      colour = "black",
+      size = 20,
+      margin = margin(r = 15)
+    ),
+    
+    axis.text = element_text(
+      colour = "black",
+      size = 20
+    ),
+    
+    axis.line = element_line(
+      colour = "black",
+      linewidth = 0.8
+    ),
+    
+    axis.ticks = element_line(
+      colour = "black",
+      linewidth = 0.8
+    ),
+    
+    axis.ticks.x = element_blank(),
+    
+    legend.position = "bottom",
+    
+    legend.title = element_text(
+      size = 18,
+      face = "bold"
+    ),
+    
+    legend.text = element_text(
+      size = 18
+    ),
+    
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    
+    panel.background = element_rect(
+      fill = "white",
+      colour = NA
+    ),
+    
+    plot.margin = margin(
+      5, 15, 5, 5
+    )
+  )
+
+print(p1)
+

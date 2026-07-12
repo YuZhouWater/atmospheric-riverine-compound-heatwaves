@@ -13,8 +13,7 @@ repo_dir <- "D:/论文1/Github"
 data_path <- file.path(
   repo_dir,
   "data",
-  "future_projection",
-  "future_heatwave_duration_summary_1981_2100.csv"
+  "Future_heatwave_duration.csv"
 )
 
 duration_summary <- read_csv(data_path, show_col_types = FALSE)

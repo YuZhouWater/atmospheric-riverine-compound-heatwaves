@@ -11,19 +11,16 @@ library(readr)
 
 
 data <- read_csv(
-  "D:/论文1/Github/data/ARCH_frequency_by_time_gap/time_gap=5.csv",
+  "D:/论文1/Github/data/ARCH_frequency_by_time_gap.csv",
   show_col_types = FALSE
 )
 
-years <- 1981:2019
-
 data_total <- data %>%
-  mutate(
-    MEAN = apply(select(., -1), 1, mean, na.rm = TRUE),
-    STD  = apply(select(., -1), 1, sd, na.rm = TRUE),
-    Year = years
+  transmute(
+    Year = year,
+    MEAN = gap5_mean,
+    STD  = gap5_sd
   ) %>%
-  select(Year, MEAN, STD) %>%
   filter(Year > 1980) %>%
   mutate(
     date = as.Date(paste0(Year, "-01-01")),
@@ -82,7 +79,11 @@ p1 <- ggplot() +
   
   geom_ribbon(
     data = data_total,
-    aes(x = Year, ymin = MEAN - STD, ymax = MEAN + STD),
+    aes(
+      x = Year,
+      ymin = MEAN - STD,
+      ymax = MEAN + STD
+    ),
     fill = "#5E3C99",
     alpha = 0.18
   ) +
@@ -137,7 +138,6 @@ p1 <- ggplot() +
 
 print(p1)
 
-
 total_fit_start_end <- data_total %>%
   mutate(
     date_for_fit = as.Date(paste0(Year, "-01-01")),
@@ -170,7 +170,12 @@ total_fit_start_end <- data_total %>%
       "]"
     )
   ) %>%
-  filter(Year %in% c(min(Year, na.rm = TRUE), max(Year, na.rm = TRUE))) %>%
+  filter(
+    Year %in% c(
+      min(Year, na.rm = TRUE),
+      max(Year, na.rm = TRUE)
+    )
+  ) %>%
   select(
     Year,
     MEAN,

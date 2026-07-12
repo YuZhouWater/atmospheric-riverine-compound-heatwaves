@@ -35,7 +35,7 @@ read_csv_safe <- function(path) {
 # -----------------------------
 # 2) Read inputs (relative paths; Code Ocean)
 # -----------------------------
-metric_path <- "D:/论文1/Github/data/ARCH data/AHW-RHW-metric.csv"
+metric_path <- "D:/论文1/Github/data/ARCH data/AHW_RHW_metric.csv"
 
 AHW_RHW_metric <- read_csv_safe(metric_path)
 # -----------------------------
