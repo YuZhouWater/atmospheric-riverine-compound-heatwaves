@@ -22,9 +22,9 @@ code/
 │   └── ARCH_trend_analysis.R
 
 data/
-│   ├── ARCH_frequency_by_time_gap/
+│   ├── ARCH_frequency_by_time_gap.csv
 │   ├── Future_heatwave_duration.csv
-│   ├── AHW-RHW-metric.csv
+│   ├── AHW_RHW_metric.csv
 │   ├── Attribute_data.csv
 │   ├── Example_40_rivers_DO.csv
 │   ├── Example_40_rivers_Tmax.csv
@@ -55,22 +55,14 @@ Calculates and visualizes future changes in heatwave duration and compound event
 
 ## Data description
 
-```text
-ARCH_frequency_by_time_gap/
-├── time_gap=1.csv
-├── time_gap=3.csv
-├── time_gap=5.csv
-├── time_gap=10.csv
-├── time_gap=15.csv
-└── time_gap=20.csv
-```
+`ARCH_frequency_by_time_gap.csv`
 Data used for sensitivity analysis under different compound event time windows.
 
 
 `Future_heatwave_duration.csv`
 Data for future projections of heatwave duration and compound proportions.
 
-`AHW-RHW-metric.csv`
+`AHW_RHW_metric.csv`
 AHWs and RHWs metric data.
 
 `Example_40_rivers_Tmax.csv`
