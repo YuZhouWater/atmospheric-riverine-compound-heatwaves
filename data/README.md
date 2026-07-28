@@ -13,11 +13,3 @@ This directory contains the datasets used for event detection, model training an
 | `Attribute_data.csv` | Static basin attributes used as input variables for the long short-term memory model. |
 | `Observed_DO_796_rivers.csv` | Observed dissolved oxygen data used for model training and evaluation. |
 | `Observed_WT_796_rivers.csv` | Observed water temperature data used for model training and evaluation. |
-
-## Abbreviations
-
-- **AHW**: atmospheric heatwave  
-- **RHW**: riverine heatwave  
-- **ARCH**: atmospheric–riverine compound heatwave  
-- **WT**: water temperature  
-- **DO**: dissolved oxygen
