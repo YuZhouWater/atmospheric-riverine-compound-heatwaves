@@ -22,6 +22,7 @@ code/
 │   └── ARCH_trend_analysis.R
 
 data/
+│   ├── README.md
 │   ├── ARCH_frequency_by_time_gap.csv
 │   ├── Future_heatwave_duration.csv
 │   ├── AHW_RHW_metric.csv
