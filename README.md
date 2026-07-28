@@ -22,6 +22,7 @@ code/
 │   └── ARCH_trend_analysis.R
 
 data/
+│   ├── README.md
 │   ├── ARCH_frequency_by_time_gap.csv
 │   ├── Future_heatwave_duration.csv
 │   ├── AHW_RHW_metric.csv
@@ -53,35 +54,10 @@ Calculates and visualizes ARCH sensitivity to different compound event time wind
 `ARCH_future_duration_and_proportion.R`
 Calculates and visualizes future changes in heatwave duration and compound event proportions.
 
+
 ## Data description
 
-`ARCH_frequency_by_time_gap.csv`
-Data used for sensitivity analysis under different compound event time windows.
-
-
-`Future_heatwave_duration.csv`
-Data for future projections of heatwave duration and compound proportions.
-
-`AHW_RHW_metric.csv`
-AHWs and RHWs metric data.
-
-`Example_40_rivers_Tmax.csv`
-Example Tmax data used for AHWs detection and ARCHs detection.
-
-`Example_40_rivers_WT.csv`
-Example WT data used for RHWs and ARCHs detection.
-
-`Example_40_rivers_DO.csv`
-Example dissolved oxygen data.
-
-`Attribute_data.csv`
-Static basin attributes used for the LSTM model.
-
-`Observed_DO_796_rivers.csv`
-Observed DO data for LSTM model training and evaluation.
-
-`Observed_WT_796_rivers.csv`
-Observed WT data for LSTM model training and evaluation.
+Descriptions of the datasets provided with this repository are available in [`data/README.md`](data/README.md).
 
 
 ## Related resources
@@ -93,7 +69,6 @@ Other datasets required for the full analysis, including site lists, basin attri
 The LSTM model used to reconstruct water temperature and dissolved oxygen time series is available from:
 
 * [WT–DO US–CE LSTM](https://github.com/LiReactiveWater/WT-DO-US-CE-LSTM)
-
 
 
 ## Important note on figure layout
